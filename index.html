@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cash y Calma — Ropa & Estilo</title>
+  <meta name="description" content="Sitio oficial de Tu Marca: drops, camisetas y streetwear." />
+  <style>
+    :root{
+      --bg:#0b0b10;
+      --card:#12121a;
+      --text:#f5f5f7;
+      --muted:#b9b9c6;
+      --brand:#8b5cf6; /* morado */
+      --brand2:#a78bfa;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 16px 40px rgba(0,0,0,.45);
+      --radius:18px;
+      --max:1120px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1000px 600px at 20% 0%, rgba(139,92,246,.25), transparent 60%),
+        radial-gradient(900px 700px at 80% 10%, rgba(167,139,250,.20), transparent 55%),
+        var(--bg);
+    }
+
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 18px;}
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px; border:1px solid var(--line);
+      border-radius:999px; background:rgba(255,255,255,.04);
+      backdrop-filter: blur(8px);
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--brand); box-shadow:0 0 0 6px rgba(139,92,246,.15);}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:12px 16px; border-radius:14px; border:1px solid var(--line);
+      background:rgba(255,255,255,.06); color:var(--text);
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      cursor:pointer;
+    }
+    .btn:hover{transform: translateY(-1px); background:rgba(255,255,255,.09); border-color:rgba(139,92,246,.55);}
+    .btn.primary{
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      border-color: transparent;
+      color:#0b0b10;
+      font-weight:700;
+    }
+    .btn.primary:hover{filter:brightness(1.05)}
+    .btn.ghost{background:transparent}
+    .muted{color:var(--muted)}
+    .grid{display:grid; gap:16px}
+    .card{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:20;
+      background:rgba(11,11,16,.65);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:12px;
+    }
+    .logo{
+      display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px;
+    }
+    .mark{
+      width:38px; height:38px; border-radius:12px;
+      background: radial-gradient(circle at 25% 20%, #fff, rgba(255,255,255,.2) 35%, rgba(139,92,246,.9) 80%);
+      box-shadow:0 10px 30px rgba(139,92,246,.25);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    nav ul{list-style:none; display:flex; gap:14px; margin:0; padding:0; align-items:center}
+    nav a{
+      padding:10px 12px; border-radius:12px; color:var(--muted);
+      border:1px solid transparent;
+    }
+    nav a:hover{color:var(--text); border-color:rgba(255,255,255,.08); background:rgba(255,255,255,.04)}
+    .nav-right{display:flex; align-items:center; gap:10px}
+    .burger{display:none}
+
+    /* Hero */
+    .hero{padding:38px 0 18px}
+    .hero-grid{
+      display:grid; grid-template-columns: 1.25fr .75fr; gap:18px;
+      align-items:stretch;
+    }
+    .hero-left{padding:26px}
+    h1{
+      margin:14px 0 10px;
+      font-size: clamp(34px, 4.4vw, 56px);
+      line-height:1.05;
+      letter-spacing:-.6px;
+    }
+    .hero-left p{margin:0 0 18px; font-size: clamp(15px, 1.4vw, 18px); color:var(--muted); max-width:52ch}
+    .hero-actions{display:flex; gap:10px; flex-wrap:wrap}
+    .hero-right{
+      padding:18px;
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .mock{
+      position:relative;
+      height:100%;
+      min-height:260px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(600px 260px at 50% 0%, rgba(139,92,246,.35), transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      overflow:hidden;
+    }
+    .mock:before{
+      content:"";
+      position:absolute; inset:-80px;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(255,255,255,.20), transparent 40%),
+        radial-gradient(circle at 70% 50%, rgba(167,139,250,.22), transparent 45%);
+      filter: blur(18px);
+      opacity:.8;
+    }
+    .mock-inner{
+      position:absolute; inset:14px;
+      border-radius: calc(var(--radius) - 8px);
+      border:1px dashed rgba(255,255,255,.18);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:16px;
+      text-align:center;
+    }
+    .statbar{
+      display:grid; grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+    }
+    .stat{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+    .stat b{display:block; font-size:18px}
+    .stat small{color:var(--muted)}
+
+    /* Sections */
+    section{padding:22px 0}
+    .section-title{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:14px;
+      margin-bottom:12px;
+    }
+    .section-title h2{margin:0; font-size:22px}
+    .section-title p{margin:0; color:var(--muted); max-width:60ch}
+
+    /* Products */
+    .products{grid-template-columns: repeat(3, 1fr)}
+    .prod{
+      padding:14px;
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .prod-img{
+      height:180px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(260px 160px at 30% 30%, rgba(139,92,246,.30), transparent 60%),
+        radial-gradient(240px 160px at 70% 60%, rgba(167,139,250,.22), transparent 55%),
+        rgba(255,255,255,.03);
+      display:flex; align-items:center; justify-content:center;
+      color:rgba(255,255,255,.70);
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .prod-row{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+    .price{font-weight:800}
+    .tag{
+      font-size:12px; color:#0b0b10; background:linear-gradient(135deg,var(--brand),var(--brand2));
+      padding:6px 10px; border-radius:999px; display:inline-block; font-weight:800;
+    }
+
+    /* About */
+    .about{grid-template-columns: 1fr 1fr}
+    .about .card{padding:18px}
+    .list{margin:10px 0 0; padding-left:18px; color:var(--muted)}
+    .list li{margin:8px 0}
+
+    /* Contact */
+    form{display:grid; gap:10px}
+    input, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      outline:none;
+    }
+    input:focus, textarea:focus{border-color: rgba(139,92,246,.65)}
+    textarea{min-height:110px; resize:vertical}
+    .footer{
+      padding:26px 0 34px;
+      color:var(--muted);
+      border-top:1px solid rgba(255,255,255,.06);
+      margin-top:18px;
+    }
+
+    /* Mobile */
+    @media (max-width: 900px){
+      .hero-grid{grid-template-columns:1fr}
+      .products{grid-template-columns:1fr}
+      .about{grid-template-columns:1fr}
+      nav ul{display:none}
+      .burger{display:inline-flex}
+      .mobile-menu{
+        display:none;
+        padding:10px 0 16px;
+      }
+      .mobile-menu a{display:block; padding:10px 0; color:var(--muted)}
+      .mobile-menu a:hover{color:var(--text)}
+      .mobile-menu.show{display:block}
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap">
+      <div class="nav">
+        <a class="logo" href="#inicio" aria-label="Inicio">
+          <div class="mark" aria-hidden="true"></div>
+          <div>
+            <div style="font-size:30px; color:var(--muted); font-weight:700;">CASH Y CALMA</div>
+            <div style="font-size:35px; font-weight:900; letter-spacing:.3px;">STREETWEAR DESIGNS</div>
+          </div>
+        </a>
+
+        <nav aria-label="Navegación">
+          <ul>
+            <li><a href="#drops">Drops</a></li>
+            <li><a href="#productos">Productos</a></li>
+            <li><a href="#historia">Historia</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-right">
+          <button class="btn ghost" id="themeBtn" type="button" title="Cambiar brillo">
+            ✨ <span class="muted">Modo</span>
+          </button>
+          <button class="btn burger" id="burger" type="button" aria-label="Abrir menú">☰</button>
+          <a class="btn primary" href="#productos">Ver colección</a>
+        </div>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu" aria-label="Menú móvil">
+        <a href="#drops">Drops</a>
+        <a href="#productos">Productos</a>
+        <a href="#historia">Historia</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="inicio" class="wrap">
+    <div class="hero">
+      <div class="hero-grid">
+        <div class="card hero-left">
+          <span class="pill"><span class="dot"></span><span>Drops nuevos • edición limitadas</span></span>
+          <h1>Ropa con actitud. <span style="color:var(--brand2)">Hecha para destacar.</span></h1>
+          <p>Bienvenido a <b>Cash y Calma</b>. Diseños limpios, detalles fuertes y una vibra street.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#productos">Comprar ahora</a>
+            <a class="btn" href="#historia">Conocer la marca</a>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="mock">
+            <div class="mock-inner">
+              <img
+                src="https://drive.google.com/thumbnail?id=1aYYEZ9ZUdZ32887mrZVzuuv7nWKExIX_&sz=w1200"
+                alt="Cash y Calma Hero Image"
+                style="
+                  width:200%;
+                  height:200%;
+                  object-fit:contain;
+                  display:block;
+                  margin-right:25px;
+                "
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="statbar" style="margin-top:16px">
+        <div class="stat"><b>Premium</b><small>Calidad de tela</small></div>
+        <div class="stat"><b>Drops</b><small>Edición limitadas</small></div>
+        <div class="stat"><b>Envios</b><small>USA / SLV</small></div>
+      </div>
+    </div>
+
+    <section id="drops">
+      <div class="section-title">
+        <div>
+          <h2>Drops</h2>
+        </div>
+        <span class="pill"><span class="dot"></span><span id="dropText">Próximo drop: Enero</span></span>
+      </div>
+
+      <div class="grid" style="grid-template-columns: 1.2fr .8fr;">
+        <div class="card" style="padding:18px">
+          <h3 style="margin:0 0 8px">DROPS: “MIDNIGHT PURPLE Y CALMA MODE”</h3>
+          <p class="muted" style="margin:0 0 14px">
+            Camisetas negras con detalles morados / blancas con detalles negro. Stock limitado.
+            Da clic en el icono de Instagram para que te dirija a la cuenta para hacer tu pedido.
+            Pago en línea se habilitará muy pronto.
+          </p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <a class="btn primary" href="#productos">Ver piezas</a>
+          </div>
+        </div>
+
+        <div class="card" style="padding:18px">
+          <h3 style="margin:0 0 8px">Oferta</h3>
+          <p class="muted" style="margin:0 0 14px">Envío gratis en compras arriba de $75.</p>
+          <div class="pill"><span class="dot"></span><span>Hecho con estilo + simple + dos diferente culturas.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="productos">
+      <div class="section-title">
+        <div><h2>Productos</h2></div>
+      </div>
+
+      <!-- Producto 1 -->
+      <article class="card prod">
+        <div class="prod-img" style="
+          height:180px;
+          width:100%;
+          overflow:hidden;
+          border-radius:16px;
+          background:#000;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+        ">
+          <img
+            src="https://drive.google.com/thumbnail?id=1UwezS1RciyGim9bImVMPDhBWX_6xdClD&sz=w1000"
+            alt="Camiseta MIDNIGHT PURPLE"
+            style="width:85%; height:85%; object-fit:contain; display:block;"
+          >
+        </div>
+
+        <div class="prod-row">
+          <div>
+            <div style="font-weight:900">Camiseta MIDNIGHT PURPLE</div>
+            <div class="muted" style="font-size:13px">Algodón • Corte oversized • Unisex</div>
+          </div>
+          <div class="price">$30 + $5.99 de envío</div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+          <span class="tag">Nuevo</span>
+          <button class="btn" type="button" onclick="addToCart('Camiseta MIDNIGHT PURPLE', 35.99)">No habilitado</button>
+        </div>
+      </article>
+
+      <!-- Producto 2 -->
+      <article class="card prod" style="margin-top:16px">
+        <div class="prod-img" style="
+          height:180px;
+          width:100%;
+          overflow:hidden;
+          border-radius:16px;
+          background:#000;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+        ">
+          <img
+            src="https://drive.google.com/thumbnail?id=1iLmTyuSHjO4hNrmV2s0r_Hq3rDfKL7Th&sz=w1200"
+            alt="Camiseta CALMA MODE"
+            style="width:85%; height:85%; object-fit:contain; display:block;"
+          >
+        </div>
+
+        <div class="prod-row">
+          <div>
+            <div style="font-weight:900">Camiseta CALMA MODE</div>
+            <div class="muted" style="font-size:13px">Algodón • Corte oversized • Unisex</div>
+          </div>
+          <div class="price">$30 + $5.99 de envío</div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+          <span class="tag">Nuevo</span>
+          <button class="btn" type="button" onclick="addToCart('Camiseta CALMA MODE', 35.99)">No habilitado</button>
+        </div>
+      </article>
+
+      <!-- Producto 3 -->
+      <article class="card prod" style="margin-top:16px">
+        <div class="prod-img" style="
+          height:180px;
+          width:100%;
+          overflow:hidden;
+          border-radius:16px;
+          background:#000;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+        ">
+          <img
+            src="https://drive.google.com/thumbnail?id=14PwAsWKAQvFK-bglANYurE-STuLK7V8M&sz=w1000"
+            alt="Hoodie"
+            style="width:85%; height:85%; object-fit:contain; display:block;"
+          >
+        </div>
+
+        <div class="prod-row">
+          <div>
+            <div style="font-weight:900">Hoodie muy pronto...</div>
+            <div class="muted" style="font-size:13px">• Unisex</div>
+          </div>
+          <div class="price">$0</div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+          <span class="tag">Nuevo pero muy pronto...</span>
+          <button class="btn" type="button" onclick="addToCart('Hoodie', 0)">No habilitado</button>
+        </div>
+      </article>
+
+      <!-- Carrito -->
+      <div class="card" style="margin-top:16px; padding:16px">
+        <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
+          <div>
+            <div style="font-weight:900">Carrito</div>
+            <div class="muted" style="font-size:13px">Se habilitará muy pronto.</div>
+          </div>
+          <div class="pill"><span class="dot"></span><span id="cartCount">0 artículos</span></div>
+        </div>
+        <div id="cartList" class="muted" style="margin-top:10px; font-size:14px"></div>
+        <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div style="font-weight:900">Total: <span id="cartTotal">$0</span></div>
+          <button class="btn primary" type="button" onclick="checkout()">No habilitado</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="historia">
+      <div class="section-title">
+        <div>
+          <h2>Historia</h2>
+          <p class="muted" style="margin-top:10px">
+            • Nuestra visión: Cash y Calma existe para representar el equilibrio que pocos entienden:
+            ambición sin ruido, dinero sin ansiedad, éxito sin perder la paz.<br><br>
+            • Nacimos de una idea simple pero poderosa: cuando hay control financiero, hay calma mental.<br><br>
+            En un mundo que presume, grita y corre, "Cash y Calma elige el silencio". No competimos por atención; competimos por significado.<br><br>
+            • Qué nos hace diferentes: No vendemos ropa, vendemos mentalidad. Cada prenda es un recordatorio de controlar el dinero, el tiempo y la mente.<br><br>
+            Minimalismo con intención: diseños que no saturan ni siguen el ruido de tendencias. Streetwear con madurez: calle, pero pulida. Ambición, pero en calma.<br><br>
+            Cash y Calma no grita éxito. Lo viste.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid about">
+        <div class="card">
+          <h3 style="margin:0 0 10px">Nuestra idea</h3>
+          <p class="muted" style="margin:0">
+            Cash y Calma nace del streetwear: simple, elegante, y con detalles que resaltan. Cada drop tiene una historia.
+          </p>
+          <ul class="list">
+            <li>Diseños limpios con identidad.</li>
+            <li>Calidad de tela y impresión.</li>
+            <li>Edición limitada y drops.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="margin:0 0 10px">Redes</h3>
+          <a href="https://www.instagram.com/cashycalma_/"
+             target="_blank"
+             rel="noopener"
+             aria-label="Instagram Cash y Calma"
+             style="
+               display:inline-flex;
+               align-items:center;
+               justify-content:center;
+               width:100px;
+               height:100px;
+               border-radius:12px;
+               border:1px solid rgba(255,255,255,.15);
+               transition:.2s;
+             "
+             onmouseover="this.style.borderColor='#8b5cf6'"
+             onmouseout="this.style.borderColor='rgba(255,255,255,.15)'"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"
+                 fill="none" viewBox="0 0 24 24" stroke="white">
+              <rect x="3" y="3" width="18" height="18" rx="5" ry="5" stroke-width="2"/>
+              <circle cx="12" cy="12" r="4" stroke-width="2"/>
+              <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <div class="wrap" style="padding:0">
+        <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap">
+          <div>© <span id="year"></span> Cash y Calma. Todos los derechos reservados.</div>
+          <div class="muted">Hecho por Elmer Aguilar.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // --- menú móvil
+    const burger = document.getElementById("burger");
+    const mobileMenu = document.getElementById("mobileMenu");
+    if (burger && mobileMenu) {
+      burger.addEventListener("click", () => mobileMenu.classList.toggle("show"));
+    }
+
+    // --- año
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    // --- carrito (demo)
+    let cart = [];
+    const cartList = document.getElementById("cartList");
+    const cartTotal = document.getElementById("cartTotal");
+    const cartCount = document.getElementById("cartCount");
+
+    function money(n){ return "$" + n.toFixed(2).replace(/\.00$/, ""); }
+
+    window.addToCart = function(name, price){
+      cart.push({name, price});
+      renderCart();
+    }
+
+    function renderCart(){
+      if (!cartList || !cartTotal || !cartCount) return;
+
+      cartCount.textContent = cart.length + (cart.length === 1 ? " artículo" : " artículos");
+      if(cart.length === 0){
+        cartList.textContent = "Se habilitará muy pronto.";
+        cartTotal.textContent = "$0";
+        return;
+      }
+      cartList.innerHTML = cart.map((item, idx) => `
+        <div style="display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.06);">
+          <span>${idx+1}. ${item.name}</span>
+          <span style="font-weight:700">${money(item.price)}</span>
+        </div>
+      `).join("");
+      const total = cart.reduce((s,i)=> s + i.price, 0);
+      cartTotal.textContent = money(total);
+    }
+    renderCart();
+
+    window.checkout = function(){
+      alert("Checkout (demo). Para vender de verdad: conecta Stripe/Shopify o un backend.");
+    }
+  </script>
+
+  <script>
+    // --- Próximo drop: próximo mes (sin romper nada)
+    const meses = [
+      "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+      "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+    ];
+    const hoy = new Date();
+    const proximoMes = meses[(hoy.getMonth() + 1) % 12];
+    const drop = document.getElementById("dropText");
+    if (drop) drop.textContent = `Próximo drop: ${proximoMes}`;
+  </script>
+
+  <script>
+    // --- botón modo (solo cambia brillo de fondo)
+    const themeBtn = document.getElementById("themeBtn");
+    let bright = false;
+    if (themeBtn) {
+      themeBtn.addEventListener("click", () => {
+        bright = !bright;
+        document.documentElement.style.setProperty("--bg", bright ? "#0f1020" : "#0b0b10");
+      });
+    }
+  </script>
+
+</body>
+</html>
