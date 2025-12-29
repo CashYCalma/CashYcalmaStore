@@ -163,6 +163,7 @@
     .section-title{
       display:flex; align-items:flex-end; justify-content:space-between; gap:14px;
       margin-bottom:12px;
+      flex-wrap:wrap;
     }
     .section-title h2{margin:0; font-size:22px}
     .section-title p{margin:0; color:var(--muted); max-width:60ch}
@@ -374,6 +375,75 @@
     @media (max-width:900px){
       .interest-grid{grid-template-columns:1fr;}
     }
+
+    /* ====== COUNTDOWN PRO (AÑADIDO) ====== */
+    .drop-right{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .timer{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      backdrop-filter: blur(8px);
+    }
+    .tsep{opacity:.6; margin:0 2px;}
+    .tbox{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      min-width:56px;
+      padding:6px 10px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.22);
+      box-shadow: 0 12px 28px rgba(0,0,0,.25);
+    }
+    .tbox b{
+      font-size:18px;
+      letter-spacing:.6px;
+      line-height:1;
+      font-variant-numeric: tabular-nums;
+    }
+    .tbox small{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:3px;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+    }
+    @media (max-width:900px){
+      .tbox{min-width:52px}
+      .tbox b{font-size:17px}
+    }
+
+    /* ====== FLIP ANIMATION (AÑADIDO) ====== */
+    .tbox{
+      perspective: 800px;
+    }
+    .tbox b{
+      transform-origin: 50% 55%;
+      transform-style: preserve-3d;
+      will-change: transform, opacity, filter;
+    }
+    .tbox b.flip{
+      animation: flipNumber .46s cubic-bezier(.2,.9,.2,1);
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.25));
+    }
+    @keyframes flipNumber{
+      0%   { transform: rotateX(0deg);   opacity:1; }
+      40%  { transform: rotateX(-80deg); opacity:.55; }
+      60%  { transform: rotateX(70deg);  opacity:.55; }
+      100% { transform: rotateX(0deg);   opacity:1; }
+    }
   </style>
 </head>
 
@@ -458,7 +528,39 @@
         <div>
           <h2>Drops</h2>
         </div>
-        <span class="pill"><span class="dot"></span><span id="dropText">Próximo drop: Enero</span></span>
+
+        <!-- ====== DROP + COUNTDOWN (AÑADIDO) ====== -->
+        <div class="drop-right">
+          <span class="pill"><span class="dot"></span><span id="dropText">Próximo drop: Enero</span></span>
+
+          <div class="timer" aria-label="Cuenta regresiva al drop">
+            <span class="muted" style="font-size:13px; font-weight:800;">Faltan</span>
+
+            <div class="tbox">
+              <b id="cdDays">00</b>
+              <small>Días</small>
+            </div>
+            <span class="tsep">:</span>
+
+            <div class="tbox">
+              <b id="cdHours">00</b>
+              <small>Hrs</small>
+            </div>
+            <span class="tsep">:</span>
+
+            <div class="tbox">
+              <b id="cdMins">00</b>
+              <small>Min</small>
+            </div>
+            <span class="tsep">:</span>
+
+            <div class="tbox">
+              <b id="cdSecs">00</b>
+              <small>Seg</small>
+            </div>
+          </div>
+        </div>
+        <!-- ====== /DROP + COUNTDOWN ====== -->
       </div>
 
       <div class="grid" style="grid-template-columns: 1.2fr .8fr;">
@@ -855,15 +957,62 @@
   </script>
 
   <script>
-    // --- Próximo drop: próximo mes
-    const meses = [
-      "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-      "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
-    ];
-    const hoy = new Date();
-    const proximoMes = meses[(hoy.getMonth() + 1) % 12];
+    // --- Próximo drop: Enero (fijo)
     const drop = document.getElementById("dropText");
-    if (drop) drop.textContent = `Próximo drop: ${proximoMes}`;
+    if (drop) drop.textContent = "Próximo drop: Enero";
+  </script>
+
+  <script>
+    // ✅ COUNTDOWN PRO + FLIP (Fecha: 31 Enero 2026)
+    // Nota: usamos hora local del visitante. Si querés hora exacta (ej: 7:00pm CST), decime y lo ajusto.
+    const DROP_DATE = new Date(2026, 0, 31, 0, 0, 0); // 31/Enero/2026 00:00:00
+
+    const elDays  = document.getElementById("cdDays");
+    const elHours = document.getElementById("cdHours");
+    const elMins  = document.getElementById("cdMins");
+    const elSecs  = document.getElementById("cdSecs");
+
+    function pad2(n){ return String(n).padStart(2,"0"); }
+
+    function setBox(el, val){
+      if(!el) return;
+      const next = String(val);
+
+      if(el.textContent === next) return; // no animar si no cambió
+
+      el.classList.remove("flip");
+      void el.offsetWidth; // reinicia animación
+      el.textContent = next;
+      el.classList.add("flip");
+      setTimeout(() => el.classList.remove("flip"), 520);
+    }
+
+    function tick(){
+      const now = new Date();
+      let diff = DROP_DATE.getTime() - now.getTime();
+
+      if(diff <= 0){
+        setBox(elDays,  "00");
+        setBox(elHours, "00");
+        setBox(elMins,  "00");
+        setBox(elSecs,  "00");
+        return;
+      }
+
+      const sec = Math.floor(diff / 1000);
+      const days = Math.floor(sec / 86400);
+      const hours = Math.floor((sec % 86400) / 3600);
+      const mins = Math.floor((sec % 3600) / 60);
+      const secs = sec % 60;
+
+      setBox(elDays,  pad2(days));
+      setBox(elHours, pad2(hours));
+      setBox(elMins,  pad2(mins));
+      setBox(elSecs,  pad2(secs));
+    }
+
+    tick();
+    setInterval(tick, 1000);
   </script>
 
   <script>
@@ -959,11 +1108,9 @@
 
   <script>
     // ====== INTERÉS GLOBAL (Google Sheets) + 1 clic por persona por producto ======
-    // Pega aquí tu URL /exec del Web App:
     const API_URL  = "https://script.google.com/macros/s/AKfycbzoFbSOME-jQkSK6gQIOg2S6QWT6j9cXVygEEpRkNWRw8LEFPdSILRGUfuAnTnO7w9yhg/exec";
     const OWNER_WA = "15076214496"; // +1 507 621 4496
 
-    // id por visitante (en este dispositivo)
     const VISITOR_KEY = "cyc_visitor_id_v1";
     function getVisitorId(){
       let id = localStorage.getItem(VISITOR_KEY);
@@ -974,7 +1121,6 @@
       return id;
     }
 
-    // bloquear 1 clic por producto (en este dispositivo)
     const VOTED_KEY = "cyc_voted_map_v1";
     function loadVoted(){
       try{ return JSON.parse(localStorage.getItem(VOTED_KEY) || "{}"); }
@@ -1020,7 +1166,7 @@
         body: JSON.stringify({ action:"inc", key, visitorId })
       });
       const data = await res.json();
-      if(data && data.ok && data.counts) return data; // {blocked, counts}
+      if(data && data.ok && data.counts) return data;
       throw new Error("No se pudo incrementar");
     }
 
@@ -1041,7 +1187,6 @@
     }
 
     window.addInterest = async function(key){
-      // bloqueo local (evita doble clic rápido)
       const voted = loadVoted();
       if(voted[key]){
         alert("Ya marcaste interés en este producto ✅");
@@ -1058,11 +1203,9 @@
         updateUIFromCounts(result.counts);
         location.hash = "#interes";
       }catch(err){
-        // si falla, desbloquea para reintentar
         voted[key] = false;
         saveVoted(voted);
 
-        // reactivar botón
         document.querySelectorAll(".js-interest").forEach(btn => {
           const k = btn.getAttribute("data-interest-key");
           if(k !== key) return;
@@ -1089,7 +1232,7 @@
       const tot = mid + cal + hoo;
 
       const msg = [
-        "Interado/a en Cash y Calma",
+        "Interesado/a en Cash y Calma",
         "",
         `Nombre: ${name || "—"}`,
         `Contacto: ${contact || "—"}`,
@@ -1106,7 +1249,6 @@
       window.open(url, "_blank", "noopener");
     };
 
-    // init
     (async function initInterest(){
       initDisableFromLocal();
       try{
