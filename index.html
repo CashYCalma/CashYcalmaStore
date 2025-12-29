@@ -958,94 +958,135 @@
   </script>
 
   <script>
-    // ====== INTERÉS (1 clic por persona por producto) + WhatsApp ======
-    const KEY_MAP   = "cyc_interest_map_v1";     // conteos (este dispositivo)
-    const KEY_VOTED = "cyc_interest_voted_v1";   // bloqueos de 1 clic por producto
-    const OWNER_WA  = "15076214496"; // +1 507 621 4496
+    // ====== INTERÉS GLOBAL (Google Sheets) + 1 clic por persona por producto ======
+    // Pega aquí tu URL /exec del Web App:
+    const API_URL  = "https://script.google.com/macros/s/AKfycbzoFbSOME-jQkSK6gQIOg2S6QWT6j9cXVygEEpRkNWRw8LEFPdSILRGUfuAnTnO7w9yhg/exec";
+    const OWNER_WA = "15076214496"; // +1 507 621 4496
 
-    function loadObj(key){
-      try{ return JSON.parse(localStorage.getItem(key) || "{}"); }
+    // id por visitante (en este dispositivo)
+    const VISITOR_KEY = "cyc_visitor_id_v1";
+    function getVisitorId(){
+      let id = localStorage.getItem(VISITOR_KEY);
+      if(!id){
+        id = "v_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
+        localStorage.setItem(VISITOR_KEY, id);
+      }
+      return id;
+    }
+
+    // bloquear 1 clic por producto (en este dispositivo)
+    const VOTED_KEY = "cyc_voted_map_v1";
+    function loadVoted(){
+      try{ return JSON.parse(localStorage.getItem(VOTED_KEY) || "{}"); }
       catch(e){ return {}; }
     }
-    function saveObj(key, obj){
-      localStorage.setItem(key, JSON.stringify(obj));
+    function saveVoted(map){ localStorage.setItem(VOTED_KEY, JSON.stringify(map)); }
+
+    function setText(id, val){
+      const el = document.getElementById(id);
+      if(el) el.textContent = val;
     }
 
-    function totalCount(map){
-      let t = 0;
-      for (const k in map) t += parseInt(map[k] || "0", 10);
-      return t;
+    function updateUIFromCounts(counts){
+      const mid = counts.midnight || 0;
+      const cal = counts.calma || 0;
+      const hoo = counts.hoodie || 0;
+      const tot = mid + cal + hoo;
+
+      setText("count-midnight", mid);
+      setText("count-calma", cal);
+      setText("count-hoodie", hoo);
+
+      setText("sum-midnight", mid);
+      setText("sum-calma", cal);
+      setText("sum-hoodie", hoo);
+      setText("sum-total", tot);
+
+      setText("interestTotal", tot + " total");
+      setText("interestTotal2", tot + " total");
     }
 
-    function updateInterestUI(){
-      const map = loadObj(KEY_MAP);
-      const mid = map.midnight || 0;
-      const cal = map.calma || 0;
-      const hoo = map.hoodie || 0;
-      const tot = totalCount(map);
-
-      const elMid = document.getElementById("count-midnight");
-      const elCal = document.getElementById("count-calma");
-      const elHoo = document.getElementById("count-hoodie");
-      if (elMid) elMid.textContent = mid;
-      if (elCal) elCal.textContent = cal;
-      if (elHoo) elHoo.textContent = hoo;
-
-      const sMid = document.getElementById("sum-midnight");
-      const sCal = document.getElementById("sum-calma");
-      const sHoo = document.getElementById("sum-hoodie");
-      const sTot = document.getElementById("sum-total");
-      if (sMid) sMid.textContent = mid;
-      if (sCal) sCal.textContent = cal;
-      if (sHoo) sHoo.textContent = hoo;
-      if (sTot) sTot.textContent = tot;
-
-      const t1 = document.getElementById("interestTotal");
-      const t2 = document.getElementById("interestTotal2");
-      if (t1) t1.textContent = tot + " total";
-      if (t2) t2.textContent = tot + " total";
+    async function apiGetCounts(){
+      const res = await fetch(`${API_URL}?action=get`, { method:"GET" });
+      const data = await res.json();
+      if(data && data.ok && data.counts) return data.counts;
+      throw new Error("Respuesta inválida del API");
     }
 
-    function applyVoteLocks(){
-      const voted = loadObj(KEY_VOTED);
+    async function apiInc(key, visitorId){
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action:"inc", key, visitorId })
+      });
+      const data = await res.json();
+      if(data && data.ok && data.counts) return data; // {blocked, counts}
+      throw new Error("No se pudo incrementar");
+    }
+
+    function disableInterestButton(key){
       document.querySelectorAll(".js-interest").forEach(btn => {
-        const key = btn.getAttribute("data-interest-key");
-        if (!key) return;
-        if (voted[key]) {
-          btn.disabled = true; // mismo texto, solo bloqueado
-        }
+        const k = btn.getAttribute("data-interest-key");
+        if(k !== key) return;
+        btn.disabled = true;
+        btn.textContent = "✅ Interés enviado";
       });
     }
 
-    window.addInterest = function(key){
-      const voted = loadObj(KEY_VOTED);
-
-      // Si ya votó por este producto, no hace nada.
-      if (voted[key]) return;
-
-      // marca como votado ANTES de sumar (para evitar doble clic rápido)
-      voted[key] = true;
-      saveObj(KEY_VOTED, voted);
-
-      // suma conteo
-      const map = loadObj(KEY_MAP);
-      map[key] = (map[key] || 0) + 1;
-      saveObj(KEY_MAP, map);
-
-      updateInterestUI();
-      applyVoteLocks();
+    function initDisableFromLocal(){
+      const voted = loadVoted();
+      ["midnight","calma","hoodie"].forEach(k => {
+        if(voted[k]) disableInterestButton(k);
+      });
     }
 
-    window.sendToWhatsApp = function(){
+    window.addInterest = async function(key){
+      // bloqueo local (evita doble clic rápido)
+      const voted = loadVoted();
+      if(voted[key]){
+        alert("Ya marcaste interés en este producto ✅");
+        return;
+      }
+      voted[key] = true;
+      saveVoted(voted);
+
+      disableInterestButton(key);
+
+      try{
+        const visitorId = getVisitorId();
+        const result = await apiInc(key, visitorId);
+        updateUIFromCounts(result.counts);
+        location.hash = "#interes";
+      }catch(err){
+        // si falla, desbloquea para reintentar
+        voted[key] = false;
+        saveVoted(voted);
+
+        // reactivar botón
+        document.querySelectorAll(".js-interest").forEach(btn => {
+          const k = btn.getAttribute("data-interest-key");
+          if(k !== key) return;
+          btn.disabled = false;
+          btn.textContent = "❤️ Me interesa";
+        });
+
+        alert("Error conectando con el contador global. Intenta de nuevo.");
+        console.error(err);
+      }
+    };
+
+    window.sendToWhatsApp = async function(){
       const name = (document.getElementById("iName")?.value || "").trim();
       const contact = (document.getElementById("iContact")?.value || "").trim();
       const note = (document.getElementById("iNote")?.value || "").trim();
 
-      const map = loadObj(KEY_MAP);
-      const mid = map.midnight || 0;
-      const cal = map.calma || 0;
-      const hoo = map.hoodie || 0;
-      const tot = totalCount(map);
+      let counts = {midnight:0, calma:0, hoodie:0};
+      try{ counts = await apiGetCounts(); }catch(e){}
+
+      const mid = counts.midnight || 0;
+      const cal = counts.calma || 0;
+      const hoo = counts.hoodie || 0;
+      const tot = mid + cal + hoo;
 
       const msg = [
         "Interés Cash y Calma",
@@ -1054,7 +1095,7 @@
         `Contacto: ${contact || "—"}`,
         `Nota: ${note || "—"}`,
         "",
-        "Conteo (este dispositivo):",
+        "Conteo GLOBAL:",
         `- MIDNIGHT PURPLE: ${mid}`,
         `- CALMA MODE: ${cal}`,
         `- HOODIE: ${hoo}`,
@@ -1063,11 +1104,18 @@
 
       const url = `https://wa.me/${OWNER_WA}?text=${encodeURIComponent(msg)}`;
       window.open(url, "_blank", "noopener");
-    }
+    };
 
     // init
-    updateInterestUI();
-    applyVoteLocks();
+    (async function initInterest(){
+      initDisableFromLocal();
+      try{
+        const counts = await apiGetCounts();
+        updateUIFromCounts(counts);
+      }catch(err){
+        console.error(err);
+      }
+    })();
   </script>
 
 </body>
