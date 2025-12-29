@@ -44,8 +44,9 @@
       display:inline-flex; align-items:center; justify-content:center; gap:10px;
       padding:12px 16px; border-radius:14px; border:1px solid var(--line);
       background:rgba(255,255,255,.06); color:var(--text);
-      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease, opacity .15s ease;
       cursor:pointer;
+      white-space:nowrap;
     }
     .btn:hover{transform: translateY(-1px); background:rgba(255,255,255,.09); border-color:rgba(139,92,246,.55);}
     .btn.primary{
@@ -56,6 +57,7 @@
     }
     .btn.primary:hover{filter:brightness(1.05)}
     .btn.ghost{background:transparent}
+    .btn[disabled]{opacity:.55; cursor:not-allowed; transform:none;}
     .muted{color:var(--muted)}
     .grid{display:grid; gap:16px}
     .card{
@@ -350,6 +352,28 @@
     @media (max-width: 900px){
       .coupons{grid-template-columns:1fr;}
     }
+
+    /* ====== INTERÉS (AÑADIDO, SIMPLE) ====== */
+    .interest-grid{grid-template-columns: 1.1fr .9fr;}
+    .interest-card{padding:18px;}
+    .field{display:flex; flex-direction:column; gap:8px;}
+    .field label{font-size:13px; color:var(--muted)}
+    .input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.22);
+      color:var(--text);
+      outline:none;
+    }
+    .input:focus{
+      border-color:rgba(139,92,246,.55);
+      box-shadow: 0 0 0 6px rgba(139,92,246,.12);
+    }
+    @media (max-width:900px){
+      .interest-grid{grid-template-columns:1fr;}
+    }
   </style>
 </head>
 
@@ -369,6 +393,7 @@
           <ul>
             <li><a href="#drops">Drops</a></li>
             <li><a href="#productos">Productos</a></li>
+            <li><a href="#interes">Interés</a></li>
             <li><a href="#cupones">Cupones</a></li>
             <li><a href="#historia">Historia</a></li>
           </ul>
@@ -386,6 +411,7 @@
       <div class="mobile-menu" id="mobileMenu" aria-label="Menú móvil">
         <a href="#drops">Drops</a>
         <a href="#productos">Productos</a>
+        <a href="#interes">Interés</a>
         <a href="#cupones">Cupones</a>
         <a href="#historia">Historia</a>
       </div>
@@ -459,9 +485,10 @@
     <section id="productos">
       <div class="section-title">
         <div><h2>Productos</h2></div>
+        <span class="pill"><span class="dot"></span><span id="interestTotal">0 total</span></span>
       </div>
 
-      <!-- Producto 1 (MIDNIGHT PURPLE) - 2 imágenes -->
+      <!-- Producto 1 (MIDNIGHT PURPLE) -->
       <article class="card prod">
         <div class="prod-gallery">
           <div class="prod-shot">
@@ -490,13 +517,22 @@
           <div class="price">TBD</div>
         </div>
 
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
           <span class="tag">Nuevo</span>
-          <button class="btn" type="button" onclick="addToCart('Camiseta MIDNIGHT PURPLE', 35.99)">No habilitado</button>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;">
+            <span class="pill" style="padding:10px 12px;">
+              <span class="dot"></span><span id="count-midnight">0</span>
+            </span>
+
+            <button class="btn js-interest" type="button" data-interest-key="midnight" onclick="addInterest('midnight')">❤️ Me interesa</button>
+
+            <button class="btn" type="button" onclick="addToCart('Camiseta MIDNIGHT PURPLE', 35.99)">No habilitado</button>
+          </div>
         </div>
       </article>
 
-      <!-- Producto 2 (CALMA MODE) - 2 imágenes (REEMPLAZADAS) -->
+      <!-- Producto 2 (CALMA MODE) -->
       <article class="card prod" style="margin-top:16px">
         <div class="prod-gallery">
           <div class="prod-shot">
@@ -525,13 +561,22 @@
           <div class="price">TBD</div>
         </div>
 
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
           <span class="tag">Nuevo</span>
-          <button class="btn" type="button" onclick="addToCart('Camiseta CALMA MODE', 35.99)">No habilitado</button>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;">
+            <span class="pill" style="padding:10px 12px;">
+              <span class="dot"></span><span id="count-calma">0</span>
+            </span>
+
+            <button class="btn js-interest" type="button" data-interest-key="calma" onclick="addInterest('calma')">❤️ Me interesa</button>
+
+            <button class="btn" type="button" onclick="addToCart('Camiseta CALMA MODE', 35.99)">No habilitado</button>
+          </div>
         </div>
       </article>
 
-      <!-- Producto 3 (HOODIE) - 2 espacios (mismo por ahora, editable después) -->
+      <!-- Producto 3 (HOODIE) -->
       <article class="card prod" style="margin-top:16px">
         <div class="prod-gallery">
           <div class="prod-shot">
@@ -560,9 +605,18 @@
           <div class="price">TBD</div>
         </div>
 
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
           <span class="tag">Nuevo pero muy pronto...</span>
-          <button class="btn" type="button" onclick="addToCart('Hoodie', 0)">No habilitado</button>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;">
+            <span class="pill" style="padding:10px 12px;">
+              <span class="dot"></span><span id="count-hoodie">0</span>
+            </span>
+
+            <button class="btn js-interest" type="button" data-interest-key="hoodie" onclick="addInterest('hoodie')">❤️ Me interesa</button>
+
+            <button class="btn" type="button" onclick="addToCart('Hoodie', 0)">No habilitado</button>
+          </div>
         </div>
       </article>
 
@@ -579,6 +633,59 @@
         <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
           <div style="font-weight:900">Total: <span id="cartTotal">$0</span></div>
           <button class="btn primary" type="button" onclick="checkout()">No habilitado</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== INTERÉS (DESPUÉS DE PRODUCTOS) ====== -->
+    <section id="interes">
+      <div class="section-title">
+        <div>
+          <h2>Interés</h2>
+          <p class="muted" style="margin-top:10px">Deja tu contacto (simple) y se abre WhatsApp con el resumen.</p>
+        </div>
+        <span class="pill"><span class="dot"></span><span id="interestTotal2">0 total</span></span>
+      </div>
+
+      <div class="grid interest-grid">
+        <div class="card interest-card">
+          <h3 style="margin:0 0 10px">Contacto</h3>
+
+          <div class="field">
+            <label for="iName">Nombre (opcional)</label>
+            <input class="input" id="iName" placeholder="Tu nombre">
+          </div>
+
+          <div class="field" style="margin-top:10px">
+            <label for="iContact">Instagram o Email</label>
+            <input class="input" id="iContact" placeholder="@usuario o correo">
+          </div>
+
+          <div class="field" style="margin-top:10px">
+            <label for="iNote">Nota (opcional)</label>
+            <input class="input" id="iNote" placeholder="Talla, color, etc.">
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+            <button class="btn primary" type="button" onclick="sendToWhatsApp()">Enviar</button>
+          </div>
+        </div>
+
+        <div class="card interest-card">
+          <h3 style="margin:0 0 10px">Resumen</h3>
+
+          <div class="pill" style="margin-top:10px"><span class="dot"></span>
+            <span>Midnight Purple: <b id="sum-midnight">0</b></span>
+          </div>
+          <div class="pill" style="margin-top:10px"><span class="dot"></span>
+            <span>Calma Mode: <b id="sum-calma">0</b></span>
+          </div>
+          <div class="pill" style="margin-top:10px"><span class="dot"></span>
+            <span>Hoodie: <b id="sum-hoodie">0</b></span>
+          </div>
+          <div class="pill" style="margin-top:10px"><span class="dot"></span>
+            <span>Total: <b id="sum-total">0</b></span>
+          </div>
         </div>
       </div>
     </section>
@@ -794,7 +901,6 @@
       document.body.style.overflow = "";
     }
 
-    // Click en cualquier imagen con class="zoomable"
     document.addEventListener("click", (e) => {
       const img = e.target.closest("img.zoomable");
       if (!img) return;
@@ -802,10 +908,8 @@
       openLightbox(full, img.alt);
     });
 
-    // Cerrar con botón
     if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
 
-    // Cerrar clickeando fuera del cuadro
     if (lightbox) {
       lightbox.addEventListener("click", (e) => {
         const inner = e.target.closest(".lightbox-inner");
@@ -813,7 +917,6 @@
       });
     }
 
-    // Cerrar con ESC
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeLightbox();
     });
@@ -854,6 +957,118 @@
     });
   </script>
 
+  <script>
+    // ====== INTERÉS (1 clic por persona por producto) + WhatsApp ======
+    const KEY_MAP   = "cyc_interest_map_v1";     // conteos (este dispositivo)
+    const KEY_VOTED = "cyc_interest_voted_v1";   // bloqueos de 1 clic por producto
+    const OWNER_WA  = "15076214496"; // +1 507 621 4496
+
+    function loadObj(key){
+      try{ return JSON.parse(localStorage.getItem(key) || "{}"); }
+      catch(e){ return {}; }
+    }
+    function saveObj(key, obj){
+      localStorage.setItem(key, JSON.stringify(obj));
+    }
+
+    function totalCount(map){
+      let t = 0;
+      for (const k in map) t += parseInt(map[k] || "0", 10);
+      return t;
+    }
+
+    function updateInterestUI(){
+      const map = loadObj(KEY_MAP);
+      const mid = map.midnight || 0;
+      const cal = map.calma || 0;
+      const hoo = map.hoodie || 0;
+      const tot = totalCount(map);
+
+      const elMid = document.getElementById("count-midnight");
+      const elCal = document.getElementById("count-calma");
+      const elHoo = document.getElementById("count-hoodie");
+      if (elMid) elMid.textContent = mid;
+      if (elCal) elCal.textContent = cal;
+      if (elHoo) elHoo.textContent = hoo;
+
+      const sMid = document.getElementById("sum-midnight");
+      const sCal = document.getElementById("sum-calma");
+      const sHoo = document.getElementById("sum-hoodie");
+      const sTot = document.getElementById("sum-total");
+      if (sMid) sMid.textContent = mid;
+      if (sCal) sCal.textContent = cal;
+      if (sHoo) sHoo.textContent = hoo;
+      if (sTot) sTot.textContent = tot;
+
+      const t1 = document.getElementById("interestTotal");
+      const t2 = document.getElementById("interestTotal2");
+      if (t1) t1.textContent = tot + " total";
+      if (t2) t2.textContent = tot + " total";
+    }
+
+    function applyVoteLocks(){
+      const voted = loadObj(KEY_VOTED);
+      document.querySelectorAll(".js-interest").forEach(btn => {
+        const key = btn.getAttribute("data-interest-key");
+        if (!key) return;
+        if (voted[key]) {
+          btn.disabled = true; // mismo texto, solo bloqueado
+        }
+      });
+    }
+
+    window.addInterest = function(key){
+      const voted = loadObj(KEY_VOTED);
+
+      // Si ya votó por este producto, no hace nada.
+      if (voted[key]) return;
+
+      // marca como votado ANTES de sumar (para evitar doble clic rápido)
+      voted[key] = true;
+      saveObj(KEY_VOTED, voted);
+
+      // suma conteo
+      const map = loadObj(KEY_MAP);
+      map[key] = (map[key] || 0) + 1;
+      saveObj(KEY_MAP, map);
+
+      updateInterestUI();
+      applyVoteLocks();
+    }
+
+    window.sendToWhatsApp = function(){
+      const name = (document.getElementById("iName")?.value || "").trim();
+      const contact = (document.getElementById("iContact")?.value || "").trim();
+      const note = (document.getElementById("iNote")?.value || "").trim();
+
+      const map = loadObj(KEY_MAP);
+      const mid = map.midnight || 0;
+      const cal = map.calma || 0;
+      const hoo = map.hoodie || 0;
+      const tot = totalCount(map);
+
+      const msg = [
+        "Interés Cash y Calma",
+        "",
+        `Nombre: ${name || "—"}`,
+        `Contacto: ${contact || "—"}`,
+        `Nota: ${note || "—"}`,
+        "",
+        "Conteo (este dispositivo):",
+        `- MIDNIGHT PURPLE: ${mid}`,
+        `- CALMA MODE: ${cal}`,
+        `- HOODIE: ${hoo}`,
+        `Total: ${tot}`
+      ].join("\n");
+
+      const url = `https://wa.me/${OWNER_WA}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank", "noopener");
+    }
+
+    // init
+    updateInterestUI();
+    applyVoteLocks();
+  </script>
+
 </body>
 </html>
-
