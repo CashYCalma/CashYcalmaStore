@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="es">
 <head>
@@ -426,9 +427,7 @@
     }
 
     /* ====== FLIP ANIMATION (AÑADIDO) ====== */
-    .tbox{
-      perspective: 800px;
-    }
+    .tbox{ perspective: 800px; }
     .tbox b{
       transform-origin: 50% 55%;
       transform-style: preserve-3d;
@@ -594,20 +593,16 @@
       <article class="card prod">
         <div class="prod-gallery">
           <div class="prod-shot">
-            <img
-              class="zoomable"
+            <img class="zoomable"
               src="https://drive.google.com/thumbnail?id=1wfSTBYAAx6WdsrgsbvlX4eppmAlOhhsp&sz=w1000"
               data-full="https://drive.google.com/thumbnail?id=1wfSTBYAAx6WdsrgsbvlX4eppmAlOhhsp&sz=w2000"
-              alt="Camiseta MIDNIGHT PURPLE - Imagen 1"
-            />
+              alt="Camiseta MIDNIGHT PURPLE - Imagen 1" />
           </div>
           <div class="prod-shot">
-            <img
-              class="zoomable"
+            <img class="zoomable"
               src="https://drive.google.com/thumbnail?id=1-ngJkYxYDNMwXb9ReJWz72mateIepkVk&sz=w1000"
               data-full="https://drive.google.com/thumbnail?id=1-ngJkYxYDNMwXb9ReJWz72mateIepkVk&sz=w2000"
-              alt="Camiseta MIDNIGHT PURPLE - Imagen 2"
-            />
+              alt="Camiseta MIDNIGHT PURPLE - Imagen 2" />
           </div>
         </div>
 
@@ -628,7 +623,6 @@
             </span>
 
             <button class="btn js-interest" type="button" data-interest-key="midnight" onclick="addInterest('midnight')">❤️ Me interesa</button>
-
             <button class="btn" type="button" onclick="addToCart('Camiseta MIDNIGHT PURPLE', 35.99)">No habilitado</button>
           </div>
         </div>
@@ -638,20 +632,16 @@
       <article class="card prod" style="margin-top:16px">
         <div class="prod-gallery">
           <div class="prod-shot">
-            <img
-              class="zoomable"
+            <img class="zoomable"
               src="https://drive.google.com/thumbnail?id=19kX9p8lQ7mGBhLLeX19GspycQI-E1CX6&sz=w1000"
               data-full="https://drive.google.com/thumbnail?id=19kX9p8lQ7mGBhLLeX19GspycQI-E1CX6&sz=w2000"
-              alt="Camiseta CALMA MODE - Imagen 1"
-            />
+              alt="Camiseta CALMA MODE - Imagen 1" />
           </div>
           <div class="prod-shot">
-            <img
-              class="zoomable"
+            <img class="zoomable"
               src="https://drive.google.com/thumbnail?id=1vRWx6thV37RHEG3UMZZkHiygvmKZCYfJ&sz=w1000"
               data-full="https://drive.google.com/thumbnail?id=1vRWx6thV37RHEG3UMZZkHiygvmKZCYfJ&sz=w2000"
-              alt="Camiseta CALMA MODE - Imagen 2"
-            />
+              alt="Camiseta CALMA MODE - Imagen 2" />
           </div>
         </div>
 
@@ -672,7 +662,6 @@
             </span>
 
             <button class="btn js-interest" type="button" data-interest-key="calma" onclick="addInterest('calma')">❤️ Me interesa</button>
-
             <button class="btn" type="button" onclick="addToCart('Camiseta CALMA MODE', 35.99)">No habilitado</button>
           </div>
         </div>
@@ -682,20 +671,16 @@
       <article class="card prod" style="margin-top:16px">
         <div class="prod-gallery">
           <div class="prod-shot">
-            <img
-              class="zoomable"
+            <img class="zoomable"
               src="https://drive.google.com/thumbnail?id=14PwAsWKAQvFK-bglANYurE-STuLK7V8M&sz=w1000"
               data-full="https://drive.google.com/thumbnail?id=14PwAsWKAQvFK-bglANYurE-STuLK7V8M&sz=w2000"
-              alt="Hoodie - Imagen 1"
-            />
+              alt="Hoodie - Imagen 1" />
           </div>
           <div class="prod-shot">
-            <img
-              class="zoomable"
+            <img class="zoomable"
               src="https://drive.google.com/thumbnail?id=14PwAsWKAQvFK-bglANYurE-STuLK7V8M&sz=w1000"
               data-full="https://drive.google.com/thumbnail?id=14PwAsWKAQvFK-bglANYurE-STuLK7V8M&sz=w2000"
-              alt="Hoodie - Imagen 2"
-            />
+              alt="Hoodie - Imagen 2" />
           </div>
         </div>
 
@@ -716,7 +701,6 @@
             </span>
 
             <button class="btn js-interest" type="button" data-interest-key="hoodie" onclick="addInterest('hoodie')">❤️ Me interesa</button>
-
             <button class="btn" type="button" onclick="addToCart('Hoodie', 0)">No habilitado</button>
           </div>
         </div>
@@ -739,7 +723,7 @@
       </div>
     </section>
 
-    <!-- ====== INTERÉS (DESPUÉS DE PRODUCTOS) ====== -->
+    <!-- ====== INTERÉS ====== -->
     <section id="interes">
       <div class="section-title">
         <div>
@@ -792,7 +776,7 @@
       </div>
     </section>
 
-    <!-- ====== CUPONES (AÑADIDO) ====== -->
+    <!-- ====== CUPONES ====== -->
     <section id="cupones">
       <div class="section-title">
         <div>
@@ -897,7 +881,7 @@
     </div>
   </main>
 
-  <!-- LIGHTBOX (expandir imagen) -->
+  <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <div class="lightbox-inner" role="dialog" aria-modal="true" aria-label="Vista ampliada">
       <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Cerrar">✕</button>
@@ -910,9 +894,7 @@
     // --- menú móvil
     const burger = document.getElementById("burger");
     const mobileMenu = document.getElementById("mobileMenu");
-    if (burger && mobileMenu) {
-      burger.addEventListener("click", () => mobileMenu.classList.toggle("show"));
-    }
+    if (burger && mobileMenu) burger.addEventListener("click", () => mobileMenu.classList.toggle("show"));
 
     // --- año
     const yearEl = document.getElementById("year");
@@ -963,9 +945,10 @@
   </script>
 
   <script>
-    // ✅ COUNTDOWN PRO + FLIP (Fecha: 01 Febrero 2026)
-    // Nota: usamos hora local del visitante. Si querés hora exacta (ej: 7:00pm CST), decime y lo ajusto.
-    const DROP_DATE = new Date(2026, 0, 31, 0, 0, 0); // 02/febrero/2026 00:00:00
+    // ✅ COUNTDOWN PRO + FLIP (Fecha: 01/02/2026 a las 12:00 AM / medianoche)
+    // Importante: new Date(año, mesIndex, día, hora, min, seg)
+    // mesIndex: 0=Enero, 1=Febrero, 2=Marzo, etc.
+    const DROP_DATE = new Date(2026, 1, 1, 0, 0, 0); // 01/Febrero/2026 00:00:00
 
     const elDays  = document.getElementById("cdDays");
     const elHours = document.getElementById("cdHours");
@@ -977,11 +960,10 @@
     function setBox(el, val){
       if(!el) return;
       const next = String(val);
-
-      if(el.textContent === next) return; // no animar si no cambió
+      if(el.textContent === next) return;
 
       el.classList.remove("flip");
-      void el.offsetWidth; // reinicia animación
+      void el.offsetWidth;
       el.textContent = next;
       el.classList.add("flip");
       setTimeout(() => el.classList.remove("flip"), 520);
@@ -1016,7 +998,7 @@
   </script>
 
   <script>
-    // --- botón modo (solo cambia brillo de fondo)
+    // --- botón modo
     const themeBtn = document.getElementById("themeBtn");
     let bright = false;
     if (themeBtn) {
@@ -1028,7 +1010,7 @@
   </script>
 
   <script>
-    // ====== LIGHTBOX JS (expandir imagen) ======
+    // ====== LIGHTBOX JS ======
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightboxImg");
     const lightboxClose = document.getElementById("lightboxClose");
@@ -1262,6 +1244,3 @@
 
 </body>
 </html>
-
-
-
