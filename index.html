@@ -531,7 +531,7 @@
 
         <!-- ====== DROP + COUNTDOWN (AÑADIDO) ====== -->
         <div class="drop-right">
-          <span class="pill"><span class="dot"></span><span id="dropText">Próximo drop: Enero</span></span>
+          <span class="pill"><span class="dot"></span><span id="dropText">Próximo drop: Febrero</span></span>
 
           <div class="timer" aria-label="Cuenta regresiva al drop">
             <span class="muted" style="font-size:13px; font-weight:800;">Faltan</span>
@@ -957,15 +957,15 @@
   </script>
 
   <script>
-    // --- Próximo drop: Enero (fijo)
+    // --- Próximo drop: Febrero (fijo)
     const drop = document.getElementById("dropText");
-    if (drop) drop.textContent = "Próximo drop: Enero";
+    if (drop) drop.textContent = "Próximo drop: Febrero";
   </script>
 
   <script>
-    // ✅ COUNTDOWN PRO + FLIP (Fecha: 31 Enero 2026)
+    // ✅ COUNTDOWN PRO + FLIP (Fecha: 01 Febrero 2026)
     // Nota: usamos hora local del visitante. Si querés hora exacta (ej: 7:00pm CST), decime y lo ajusto.
-    const DROP_DATE = new Date(2026, 0, 31, 0, 0, 0); // 31/Enero/2026 00:00:00
+    const DROP_DATE = new Date(2026, 0, 31, 0, 0, 0); // 01/Febrero/2026 00:00:00
 
     const elDays  = document.getElementById("cdDays");
     const elHours = document.getElementById("cdHours");
@@ -1262,3 +1262,4 @@
 
 </body>
 </html>
+
