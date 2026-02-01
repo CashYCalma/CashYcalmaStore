@@ -1656,46 +1656,73 @@
   };
 </script>
 <script>
-  // ====== CONTADOR + BLOQUEO DE PAGO (CORREGIDO) ======
-  <script>
-    // ====== DESBLOQUEO POR CÓDIGO ======
+  // ====== BLOQUEO + DESBLOQUEO DE PAGO (FINAL FUNCIONAL) ======
 
-    function unlockWithCode(){
-    const input = document.getElementById("earlyAccessInput");
-    const msg   = document.getElementById("earlyAccessMsg");
-    const paySection = document.getElementById("pago");
+  let earlyAccessUnlocked = false;
 
-    if (!input || !paySection) return;
+  const PAY_UNLOCK_DATE = new Date(2026, 1, 1, 12, 0, 0);
 
-    const code = input.value.trim().toUpperCase();
+  const paySection = document.getElementById("pago");
+  const lockMsg = document.getElementById("payLockedMsg");
+  const cdWrap = document.getElementById("payCountdown");
 
-    // 🔑 CÓDIGO CORRECTO
-    if (code === "THANKYOUFORTHESUPPORT") {
+  const dEl = document.getElementById("payDays");
+  const hEl = document.getElementById("payHours");
+  const mEl = document.getElementById("payMins");
+  const sEl = document.getElementById("paySecs");
 
-    // Marcar como desbloqueado
+  function pad(n){ return String(n).padStart(2,"0"); }
+
+  function updatePayCountdown(){
+    if (!paySection) return;
+    if (earlyAccessUnlocked) return;
+
+    const diff = PAY_UNLOCK_DATE - new Date();
+
+    if (diff <= 0) {
+      unlockPayUI();
+      return;
+    }
+
+    paySection.classList.add("pay-locked");
+    paySection.style.opacity = ".5";
+    paySection.style.pointerEvents = "none";
+
+    const sec = Math.floor(diff / 1000);
+    if (dEl) dEl.textContent = pad(Math.floor(sec / 86400));
+    if (hEl) hEl.textContent = pad(Math.floor((sec % 86400) / 3600));
+    if (mEl) mEl.textContent = pad(Math.floor((sec % 3600) / 60));
+    if (sEl) sEl.textContent = pad(sec % 60);
+  }
+
+  function unlockPayUI(){
     earlyAccessUnlocked = true;
-
-    // Desbloquear sección
     paySection.classList.remove("pay-locked");
     paySection.style.opacity = "1";
     paySection.style.pointerEvents = "auto";
-
-    // Mensaje visual
-    msg.textContent = "✅ Acceso anticipado activado";
-    msg.style.color = "#8b5cf6";
-
-    // Opcional: ocultar el countdown
-    const cd = document.getElementById("payCountdown");
-    if (cd) cd.remove();
-
-    const lockMsg = document.getElementById("payLockedMsg");
     if (lockMsg) lockMsg.remove();
+    if (cdWrap) cdWrap.remove();
+  }
 
-  } else {
-    msg.textContent = "❌ Código incorrecto";
-    msg.style.color = "#ff6b6b";
+  function unlockWithCode(){
+    const input = document.getElementById("earlyAccessInput");
+    const msg = document.getElementById("earlyAccessMsg");
+    if (!input) return;
+
+    const code = input.value.trim().toUpperCase();
+
+    if (code === "THANKYOUFORTHESUPPORT") {
+      unlockPayUI();
+      msg.textContent = "✅ Acceso anticipado activado";
+      msg.style.color = "#8b5cf6";
+    } else {
+      msg.textContent = "❌ Código incorrecto";
+      msg.style.color = "#ff6b6b";
+    }
   }
-  }
+
+  updatePayCountdown();
+  setInterval(updatePayCountdown, 1000);
 </script>
 
   let earlyAccessUnlocked = false;
