@@ -1656,7 +1656,7 @@
   };
 </script>
 <script>
-  // ====== BLOQUEO + DESBLOQUEO DE PAGO (FINAL FUNCIONAL) ======
+  // ====== BLOQUEO + DESBLOQUEO DE PAGO (ÚNICO Y LIMPIO) ======
 
   let earlyAccessUnlocked = false;
 
@@ -1673,29 +1673,13 @@
 
   function pad(n){ return String(n).padStart(2,"0"); }
 
-  function updatePayCountdown(){
-    if (!paySection) return;
-    if (earlyAccessUnlocked) return;
-
-    const diff = PAY_UNLOCK_DATE - new Date();
-
-    if (diff <= 0) {
-      unlockPayUI();
-      return;
-    }
-
+  function lockPay(){
     paySection.classList.add("pay-locked");
     paySection.style.opacity = ".5";
     paySection.style.pointerEvents = "none";
-
-    const sec = Math.floor(diff / 1000);
-    if (dEl) dEl.textContent = pad(Math.floor(sec / 86400));
-    if (hEl) hEl.textContent = pad(Math.floor((sec % 86400) / 3600));
-    if (mEl) mEl.textContent = pad(Math.floor((sec % 3600) / 60));
-    if (sEl) sEl.textContent = pad(sec % 60);
   }
 
-  function unlockPayUI(){
+  function unlockPay(){
     earlyAccessUnlocked = true;
     paySection.classList.remove("pay-locked");
     paySection.style.opacity = "1";
@@ -1704,79 +1688,40 @@
     if (cdWrap) cdWrap.remove();
   }
 
-  function unlockWithCode(){
+  function updatePayCountdown(){
+    if (!paySection || earlyAccessUnlocked) return;
+
+    const diff = PAY_UNLOCK_DATE - new Date();
+
+    if (diff <= 0) {
+      unlockPay();
+      return;
+    }
+
+    lockPay();
+
+    const sec = Math.floor(diff / 1000);
+    if (dEl) dEl.textContent = pad(Math.floor(sec / 86400));
+    if (hEl) hEl.textContent = pad(Math.floor((sec % 86400) / 3600));
+    if (mEl) mEl.textContent = pad(Math.floor((sec % 3600) / 60));
+    if (sEl) sEl.textContent = pad(sec % 60);
+  }
+
+  window.unlockWithCode = function(){
     const input = document.getElementById("earlyAccessInput");
     const msg = document.getElementById("earlyAccessMsg");
+
     if (!input) return;
 
-    const code = input.value.trim().toUpperCase();
-
-    if (code === "THANKYOUFORTHESUPPORT") {
-      unlockPayUI();
+    if (input.value.trim().toUpperCase() === "THANKYOUFORTHESUPPORT") {
+      unlockPay();
       msg.textContent = "✅ Acceso anticipado activado";
       msg.style.color = "#8b5cf6";
     } else {
       msg.textContent = "❌ Código incorrecto";
       msg.style.color = "#ff6b6b";
     }
-  }
-
-  updatePayCountdown();
-  setInterval(updatePayCountdown, 1000);
-</script>
-
-  let earlyAccessUnlocked = false;
-
-  // 1 de febrero a las 12:00 PM (hora local)
-  const PAY_UNLOCK_DATE = new Date(2026, 1, 1, 12, 0, 0);
-
-  const paySection = document.getElementById("pago");
-  const lockMsg = document.getElementById("payLockedMsg");
-  const cdWrap = document.getElementById("payCountdown");
-
-  const dEl = document.getElementById("payDays");
-  const hEl = document.getElementById("payHours");
-  const mEl = document.getElementById("payMins");
-  const sEl = document.getElementById("paySecs");
-
-  function pad(n){ return String(n).padStart(2,"0"); }
-
-  function updatePayCountdown(){
-
-    if (!paySection) return;
-
-    if (earlyAccessUnlocked) return;
-
-    const now = new Date();
-    const diff = PAY_UNLOCK_DATE - now;
-
-    // 🔓 DESBLOQUEAR POR FECHA
-    if (diff <= 0) {
-      paySection.classList.remove("pay-locked");
-      paySection.style.opacity = "1";
-      paySection.style.pointerEvents = "auto";
-
-      if (lockMsg) lockMsg.remove();
-      if (cdWrap) cdWrap.remove();
-      return;
-    }
-
-    // 🔒 BLOQUEADO
-    paySection.classList.add("pay-locked");
-    paySection.style.opacity = ".5";
-    paySection.style.pointerEvents = "none";
-
-    const sec = Math.floor(diff / 1000);
-    const days = Math.floor(sec / 86400);
-    const hours = Math.floor((sec % 86400) / 3600);
-    const mins = Math.floor((sec % 3600) / 60);
-    const secs = sec % 60;
-
-    if (dEl) dEl.textContent = pad(days);
-    if (hEl) hEl.textContent = pad(hours);
-    if (mEl) mEl.textContent = pad(mins);
-    if (sEl) sEl.textContent = pad(secs);
-  }
+  };
 
   updatePayCountdown();
   setInterval(updatePayCountdown, 1000);
