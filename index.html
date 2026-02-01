@@ -1412,37 +1412,9 @@
             : (couponAppliedPay ? SQUARE_LINKS.calma.coupon : SQUARE_LINKS.calma.normal);
     window.open(link, "_blank");
   };
-
-  window.sendZelleWhatsApp = function(){
-    const {mid, cal, qty} = selectedCount("zlMid","zlCal");
-    if(!qty) return alert("Selecciona 1 camisa.");
-
-    const base = SHIRT_PRICE_ZELLE * qty;
-    const disc = couponAppliedZelle ? base * 0.10 : 0;
-    const total = base - disc;
-
-    const items = [];
-    if(mid) items.push("• Camiseta MIDNIGHT PURPLE — $35.99");
-    if(cal) items.push("• Camiseta CALMA MODE — $35.99");
-
-    const msg = [
-      "🏦 PEDIDO ZELLE — Cash y Calma",
-      "",
-      ...items,
-      "",
-      `Subtotal: $${base.toFixed(2)}`,
-      `Descuento: -$${disc.toFixed(2)}`,
-      `Total Zelle: $${total.toFixed(2)}`,
-      "Envío: se coordina"
-    ].join("\n");
-
-    window.open(`https://wa.me/15076214496?text=${encodeURIComponent(msg)}`);
-  };
-
-  updateSquareTotals();
-  updateZelleTotals();
 </script>
-
+updateSquareTotals();
+updateZelleTotals();
 
 <script>
   // ====== INTERÉS GLOBAL (Google Sheets) + 1 clic por persona por producto ======
@@ -1598,22 +1570,38 @@
   })();
 </script>
 <script>
-  // ====== ZELLE → ENVIAR PEDIDO POR INSTAGRAM ======
-  window.sendZelleInstagram = function(){
-    const mid = document.getElementById("zlMid")?.checked;
-    const cal = document.getElementById("zlCal")?.checked;
+  window.sendZelleWhatsApp = function(){
+    const mid   = document.getElementById("zlMid")?.checked;
+    const cal   = document.getElementById("zlCal")?.checked;
+    const hood1 = document.getElementById("zlHoodie1")?.checked;
+    const hood2 = document.getElementById("zlHoodie2")?.checked;
 
-    if(!mid && !cal){
-      alert("Selecciona 1 camisa para continuar.");
+    if(!mid && !cal && !hood1 && !hood2){
+      alert("Selecciona 1 producto para continuar.");
       return;
     }
 
+    let base = 0;
     const items = [];
-    if(mid) items.push("• Camiseta MIDNIGHT PURPLE — $35.99");
-    if(cal) items.push("• Camiseta CALMA MODE — $35.99");
 
-    const base = 35.99;
-    const disc = (typeof couponAppliedZelle !== "undefined" && couponAppliedZelle) ? base * 0.10 : 0;
+    if(mid){
+      base = 35.99;
+      items.push("• Camiseta MIDNIGHT PURPLE — $35.99");
+    }
+    if(cal){
+      base = 35.99;
+      items.push("• Camiseta CALMA MODE — $35.99");
+    }
+    if(hood1){
+      base = 50.00;
+      items.push("• Hoodie MIDNIGHT PURPLE — $50.00");
+    }
+    if(hood2){
+      base = 50.00;
+      items.push("• Hoodie CALMA MODE — $50.00");
+    }
+
+    const disc = couponAppliedZelle ? base * 0.10 : 0;
     const total = base - disc;
 
     const msg = [
@@ -1624,37 +1612,77 @@
       `Subtotal: $${base.toFixed(2)}`,
       `Descuento: -$${disc.toFixed(2)}`,
       `Total Zelle: $${total.toFixed(2)}`,
+      "📦 Entrega estimada: 7–14 días hábiles",
       "Envío: se coordina"
     ].join("\n");
 
+    window.open(`https://wa.me/15076214496?text=${encodeURIComponent(msg)}`);
+  };
+</script>
+<script>
+  window.sendZelleInstagram = function(){
+    const mid   = document.getElementById("zlMid")?.checked;
+    const cal   = document.getElementById("zlCal")?.checked;
+    const hood1 = document.getElementById("zlHoodie1")?.checked;
+    const hood2 = document.getElementById("zlHoodie2")?.checked;
+
+    if(!mid && !cal && !hood1 && !hood2){
+      alert("Selecciona 1 producto para continuar.");
+      return;
+    }
+
+    let base = 0;
+    const items = [];
+
+    if(mid){
+      base = 35.99;
+      items.push("• Camiseta MIDNIGHT PURPLE — $35.99");
+    }
+    if(cal){
+      base = 35.99;
+      items.push("• Camiseta CALMA MODE — $35.99");
+    }
+    if(hood1){
+      base = 50.00;
+      items.push("• Hoodie MIDNIGHT PURPLE — $50.00");
+    }
+    if(hood2){
+      base = 50.00;
+      items.push("• Hoodie CALMA MODE — $50.00");
+    }
+
+    const disc = couponAppliedZelle ? base * 0.10 : 0;
+    const total = base - disc;
+
+    const msg = [
+      "📸 PEDIDO POR INSTAGRAM — Cash y Calma",
+      "",
+      ...items,
+      "",
+      `Subtotal: $${base.toFixed(2)}`,
+      `Descuento: -$${disc.toFixed(2)}`,
+      `Total: $${total.toFixed(2)}`,
+      "📦 Entrega estimada: 7–14 días hábiles",
+      "",
+      "Hola 👋 quiero hacer este pedido."
+    ].join("\n");
+
     const IG_USER = "cashycalma_";
-    const IG_APP  = `instagram://user?username=${IG_USER}`;
-    const IG_WEB  = `https://www.instagram.com/${IG_USER}/`;
+    const IG_URL  = `https://www.instagram.com/${IG_USER}/`;
 
-    // Copia el mensaje
     navigator.clipboard.writeText(msg).then(() => {
-      alert("Mensaje copiado ✅\nSe abrirá Instagram para enviarlo por DM.");
-
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-      if(isMobile){
-        // Intenta abrir la app
-        window.location.href = IG_APP;
-
-        // Fallback a web si no abre la app
-        setTimeout(() => {
-          window.location.href = IG_WEB;
-        }, 1200);
-      } else {
-        // Desktop
-        window.open(IG_WEB, "_blank", "noopener");
-      }
+      alert(
+              "Mensaje copiado ✅\n\n" +
+              "Se abrirá Instagram.\n" +
+              "Pega el mensaje en el DM y envíalo 📩"
+      );
+      window.open(IG_URL, "_blank", "noopener");
     }).catch(() => {
-      // Si falla copiar, igual abre Instagram
-      window.open(IG_WEB, "_blank", "noopener");
+      window.open(IG_URL, "_blank", "noopener");
     });
   };
 </script>
+
 <script>
   // ====== BLOQUEO + DESBLOQUEO DE PAGO (ÚNICO Y LIMPIO) ======
 
