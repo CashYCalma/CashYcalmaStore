@@ -468,7 +468,34 @@
     }
     .pay-amount b{color:var(--text)}
     .tiny{font-size:12px; color:rgba(255,255,255,.75)}
+    /* ====== BLOQUEO INTELIGENTE DE PAGO ====== */
+    .pay-locked .pay-grid {
+      pointer-events: none;
+      opacity: .5;
+    }
+
+    /* ====== CAJA DE ACCESO ANTICIPADO (VISIBLE SIEMPRE) ====== */
+    #earlyAccessBox {
+      pointer-events: auto;
+      opacity: 1;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    /* Asegura que input y botón se vean normales */
+    #earlyAccessBox input,
+    #earlyAccessBox button,
+    #earlyAccessBox label,
+    #earlyAccessBox div {
+      opacity: 1 !important;
+    }
+
+
   </style>
+
 </head>
 
 <body>
@@ -698,48 +725,90 @@
       <div class="prod-gallery">
         <div class="prod-shot">
           <img class="zoomable"
-               src="https://drive.google.com/thumbnail?id=14PwAsWKAQvFK-bglANYurE-STuLK7V8M&sz=w1000"
-               data-full="https://drive.google.com/thumbnail?id=14PwAsWKAQvFK-bglANYurE-STuLK7V8M&sz=w2000"
-               alt="Hoodie - Imagen 1" />
+               src="https://drive.google.com/thumbnail?id=1S_kFSiafwnPkVSahnGwo-NgrUE5hw6H7&sz=w1000"
+               data-full="https://drive.google.com/thumbnail?id=1S_kFSiafwnPkVSahnGwo-NgrUE5hw6H7&sz=w2000"
+               alt="Hoodie Cash y Calma - Imagen frontal" />
         </div>
+
         <div class="prod-shot">
           <img class="zoomable"
-               src="https://drive.google.com/thumbnail?id=14PwAsWKAQvFK-bglANYurE-STuLK7V8M&sz=w1000"
-               data-full="https://drive.google.com/thumbnail?id=14PwAsWKAQvFK-bglANYurE-STuLK7V8M&sz=w2000"
-               alt="Hoodie - Imagen 2" />
+               src="https://drive.google.com/thumbnail?id=15Wa98d4Nh2fhif22mAXmHd6-jENaGODJ&sz=w1000"
+               data-full="https://drive.google.com/thumbnail?id=15Wa98d4Nh2fhif22mAXmHd6-jENaGODJ&sz=w2000"
+               alt="Hoodie Cash y Calma - Imagen posterior" />
         </div>
       </div>
+      <!-- Producto 4 (HOODIE VARIANTE 2) -->
+      <article class="card prod" style="margin-top:16px">
+        <div class="prod-gallery">
+          <div class="prod-shot">
+            <img class="zoomable"
+                 src="https://drive.google.com/thumbnail?id=1SUTwbZ81bplZsh7308g2_fve4_JQORrx&sz=w1000"
+                 data-full="https://drive.google.com/thumbnail?id=1SUTwbZ81bplZsh7308g2_fve4_JQORrx&sz=w2000"
+                 alt="Hoodie Cash y Calma Variant 2 - Imagen frontal" />
+          </div>
 
-      <div class="prod-row">
-        <div>
-          <div style="font-weight:900">Hoodie muy pronto...</div>
-          <div class="muted" style="font-size:13px">• Unisex</div>
+          <div class="prod-shot">
+            <img class="zoomable"
+                 src="https://drive.google.com/thumbnail?id=1wfa_HD4hos-yGe4DgXZ8WnTnCZ6rfIzc&sz=w1000"
+                 data-full="https://drive.google.com/thumbnail?id=1wfa_HD4hos-yGe4DgXZ8WnTnCZ6rfIzc&sz=w2000"
+                 alt="Hoodie Cash y Calma Variant 2 - Imagen posterior" />
+          </div>
         </div>
-        <div class="price">TBD</div>
-      </div>
 
-      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-        <span class="tag">Nuevo pero muy pronto...</span>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;">
-            <span class="pill" style="padding:10px 12px;">
-              <span class="dot"></span><span id="count-hoodie">0</span>
-            </span>
-
-          <button class="btn js-interest" type="button" data-interest-key="hoodie" onclick="addInterest('hoodie')">❤️ Me interesa</button>
+        <div class="prod-row">
+          <div>
+            <div style="font-weight:900">Hoodie CALMA MODE LIMITED EDITION— Hoodie PURPLE MIDNIGHT LIMITED EDITION</div>
+            <div class="muted" style="font-size:13px">Algodón premium • Unisex • Corte oversized</div>
+          </div>
+          <div class="price">$50.00</div>
         </div>
-      </div>
-    </article>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+          <span class="tag">Pre-ordenar</span>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;">
+      <span class="pill" style="padding:10px 12px;">
+        <span class="dot"></span><span>Solo se aceptan pre-ordenes a través de WhatsApp o Instagram.</span>
+      </span>
+
+            <button class="btn js-interest"
+                    type="button"
+                    data-interest-key="hoodie2"
+                    onclick="addInterest('hoodie2')">
+              ❤️ Me interesa
+            </button>
+          </div>
+        </div>
   </section>
 
   <!-- ✅ PAGO (AÑADIDO) - SOLO 1 PRENDA -->
-  <section id="pago" data-locked="true" style="opacity:.5; pointer-events:none;">
+  <section id="pago" data-locked="true" class="pay-locked">
   <div class="section-title">
       <div>
         <h2>Pago</h2>
         <p id="payLockedMsg" class="muted" style="margin-top:10px;">
           🔒 Los pagos estarán disponibles el <b>1 de febrero a las 12:00 PM</b>.
         </p>
+        <div id="earlyAccessBox" style="margin-top:14px; max-width:420px;">
+          <label class="muted" style="font-size:13px;">
+            🎁 Código de acceso anticipado
+          </label>
+
+          <div style="display:flex; gap:10px; margin-top:6px;">
+            <input
+                    id="earlyAccessInput"
+                    class="input"
+                    placeholder="Ingresa tu código"
+                    autocomplete="off"
+            />
+            <button class="btn" type="button" onclick="unlockWithCode()">
+              Activar
+            </button>
+          </div>
+
+          <div id="earlyAccessMsg" class="tiny" style="margin-top:6px;"></div>
+        </div>
+
         <div id="payCountdown" class="pill" style="margin-top:12px; gap:14px;">
           ⏳
           <span><b id="payDays">00</b>d</span>
@@ -839,6 +908,15 @@
               <span><b>Calma Mode</b> — $35.99</span>
               <input type="checkbox" id="zlCal" />
             </label>
+            <label class="pill" style="justify-content:space-between">
+              <span><b>Hoodie Midnight PURPLE</b> — $50.00</span>
+              <input type="checkbox" id="zlHoodie1" />
+            </label>
+
+            <label class="pill" style="justify-content:space-between">
+              <span><b>Hoodie Calma Mode</b> — $50.00</span>
+              <input type="checkbox" id="zlHoodie2" />
+            </label>
           </div>
         </div>
 
@@ -853,7 +931,7 @@
 
         <div class="pay-amount">
           <div>
-            <div class="muted" style="font-size:12px">Camisa</div>
+            <div class="muted" style="font-size:12px">Camisa/Hoodie</div>
             <b id="zlItems">$0.00</b>
           </div>
           <div>
@@ -1222,6 +1300,8 @@
 
   const SHIRT_PRICE_SQUARE = 37.50;
   const SHIRT_PRICE_ZELLE  = 35.99;
+  const HOODIE_PRICE_ZELLE = 50.00;
+
 
   const SQUARE_LINKS = {
     midnight: { normal: "https://square.link/u/zyW5qPLX", coupon: "https://square.link/u/6A14ziQI" },
@@ -1252,14 +1332,28 @@
   }
 
   function updateZelleTotals(){
-    const {qty} = selectedCount("zlMid","zlCal");
-    const base = SHIRT_PRICE_ZELLE * qty;
+
+    const mid    = document.getElementById("zlMid")?.checked;
+    const cal    = document.getElementById("zlCal")?.checked;
+    const hood1  = document.getElementById("zlHoodie1")?.checked;
+    const hood2  = document.getElementById("zlHoodie2")?.checked;
+
+    let base = 0;
+
+    if (mid || cal) {
+      base = SHIRT_PRICE_ZELLE;
+    }
+
+    if (hood1 || hood2) {
+      base = HOODIE_PRICE_ZELLE;
+    }
+
     const disc = couponAppliedZelle ? base * 0.10 : 0;
     const total = base - disc;
 
-    document.getElementById("zlItems").textContent = qty ? `$${base.toFixed(2)}` : "$0.00";
+    document.getElementById("zlItems").textContent = base ? `$${base.toFixed(2)}` : "$0.00";
     document.getElementById("zlDisc").textContent  = disc ? `-$${disc.toFixed(2)}` : "$0.00";
-    document.getElementById("zlTotal").textContent = qty ? `$${total.toFixed(2)}` : "$0.00";
+    document.getElementById("zlTotal").textContent = base ? `$${total.toFixed(2)}` : "$0.00";
   }
 
   function enforceSingleChoice(ids, changed){
@@ -1278,6 +1372,14 @@
   ["zlMid","zlCal"].forEach(id=>{
     document.getElementById(id).addEventListener("change",()=>{
       enforceSingleChoice(["zlMid","zlCal"], id);
+      updateZelleTotals();
+    });
+  });
+  ["zlMid","zlCal","zlHoodie1","zlHoodie2"].forEach(id=>{
+    document.getElementById(id).addEventListener("change",()=>{
+      ["zlMid","zlCal","zlHoodie1","zlHoodie2"].forEach(other=>{
+        if(other !== id) document.getElementById(other).checked = false;
+      });
       updateZelleTotals();
     });
   });
@@ -1555,7 +1657,7 @@
 </script>
 <script>
   // ====== CONTADOR + BLOQUEO DE PAGO (FINAL) ======
-
+  let earlyAccessUnlocked = false;
   // 1 de febrero a las 12:00 PM (hora local del usuario)
   const PAY_UNLOCK_DATE = new Date(2026, 1, 1, 12, 0, 0);
 
@@ -1571,22 +1673,41 @@
   function pad(n){ return String(n).padStart(2,"0"); }
 
   function updatePayCountdown(){
+
+    if (earlyAccessUnlocked) {
+      return; // ⛔ NO volver a bloquear si ya se desbloqueó por código
+    }
+
     const now = new Date();
     let diff = PAY_UNLOCK_DATE - now;
 
-    // 🔓 DESBLOQUEAR
     if(diff <= 0){
       paySection.style.opacity = "1";
       paySection.style.pointerEvents = "auto";
       paySection.removeAttribute("data-locked");
+      paySection.classList.remove("pay-locked");
 
       if(lockMsg) lockMsg.remove();
       if(cdWrap) cdWrap.remove();
-
       return;
     }
 
-    // 🔒 BLOQUEADO
+    paySection.style.opacity = ".5";
+    paySection.style.pointerEvents = "none";
+
+    const sec = Math.floor(diff / 1000);
+    const days = Math.floor(sec / 86400);
+    const hours = Math.floor((sec % 86400) / 3600);
+    const mins = Math.floor((sec % 3600) / 60);
+    const secs = sec % 60;
+
+    if(dEl) dEl.textContent = pad(days);
+    if(hEl) hEl.textContent = pad(hours);
+    if(mEl) mEl.textContent = pad(mins);
+    if(sEl) sEl.textContent = pad(secs);
+  }
+
+  // 🔒 BLOQUEADO
     paySection.style.opacity = ".5";
     paySection.style.pointerEvents = "none";
 
@@ -1605,7 +1726,61 @@
   updatePayCountdown();
   setInterval(updatePayCountdown, 1000);
 </script>
+<script>
+  // ====== ACCESO ANTICIPADO POR CÓDIGO ======
 
+  const EARLY_ACCESS_CODE = "THANKYOUFORTHESUPPORT";
+  const EARLY_ACCESS_KEY  = "cyc_early_access_unlocked";
 
+  function normalize(str){
+    return (str || "").trim().toUpperCase();
+  }
+
+  function unlockPaySection(){
+    const paySection = document.getElementById("pago");
+    const lockMsg = document.getElementById("payLockedMsg");
+    const cdWrap = document.getElementById("payCountdown");
+    const earlyBox = document.getElementById("earlyAccessBox");
+
+    earlyAccessUnlocked = true; // 🔑 CLAVE
+
+    if(paySection){
+      paySection.style.opacity = "1";
+      paySection.style.pointerEvents = "auto";
+      paySection.removeAttribute("data-locked");
+      paySection.classList.remove("pay-locked"); // 🔥 ESTO ERA CLAVE
+    }
+
+    if(lockMsg) lockMsg.remove();
+    if(cdWrap) cdWrap.remove();
+    if(earlyBox) earlyBox.remove();
+  }
+
+  window.unlockWithCode = function(){
+    const input = document.getElementById("earlyAccessInput");
+    const msg = document.getElementById("earlyAccessMsg");
+
+    if(!input || !msg) return;
+
+    if(normalize(input.value) === EARLY_ACCESS_CODE){
+      if(normalize(input.value) === EARLY_ACCESS_CODE){
+        unlockPaySection();
+      }
+    } else {
+      msg.textContent = "❌ Código inválido";
+      msg.style.color = "#f87171";
+    }
+  };
+
+</script>
+// 🔒 Siempre iniciar bloqueado al cargar la página
+window.addEventListener("load", () => {
+const paySection = document.getElementById("pago");
+if (!paySection) return;
+
+paySection.classList.add("pay-locked");
+paySection.style.opacity = ".5";
+paySection.style.pointerEvents = "none";
+});
 </body>
 </html>
