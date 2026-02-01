@@ -1694,38 +1694,57 @@ updateZelleTotals();
       return;
     }
 
+    // precios
+    const SHIRT_PRICE_ZELLE  = 35.99;
+    const HOODIE_PRICE_ZELLE = 50.00;
+
+    // construye item + base
     let base = 0;
     const items = [];
 
     if(mid){
-      base = 35.99;
+      base = SHIRT_PRICE_ZELLE;
       items.push("• Camiseta MIDNIGHT PURPLE — $35.99");
     }
     if(cal){
-      base = 35.99;
+      base = SHIRT_PRICE_ZELLE;
       items.push("• Camiseta CALMA MODE — $35.99");
     }
     if(hood1){
-      base = 50.00;
+      base = HOODIE_PRICE_ZELLE;
       items.push("• Hoodie MIDNIGHT PURPLE — $50.00");
     }
     if(hood2){
-      base = 50.00;
+      base = HOODIE_PRICE_ZELLE;
       items.push("• Hoodie CALMA MODE — $50.00");
     }
 
-    const disc = couponAppliedZelle ? base * 0.10 : 0;
+    // cupón (usa tu variable global couponAppliedZelle)
+    const couponCode = "FIRSTDROP10";
+    const hasCoupon = !!window.couponAppliedZelle; // o couponAppliedZelle si está en el mismo scope
+
+    const disc = hasCoupon ? base * 0.10 : 0;
     const total = base - disc;
+
+    const couponLine = hasCoupon
+            ? `Cupón aplicado: ${couponCode} ✅ (-$${disc.toFixed(2)})`
+            : `Cupón aplicado: NO`;
+
+    const totalLine = hasCoupon
+            ? `Total a pagar (con cupón): $${total.toFixed(2)}`
+            : `Total a pagar: $${total.toFixed(2)}`;
 
     const msg = [
       "📸 PEDIDO POR INSTAGRAM — Cash y Calma",
       "",
+      "Producto:",
       ...items,
       "",
       `Subtotal: $${base.toFixed(2)}`,
-      `Descuento: -$${disc.toFixed(2)}`,
-      `Total: $${total.toFixed(2)}`,
+      couponLine,
+      totalLine,
       "📦 Entrega estimada: 7–14 días hábiles",
+      "Envío: se coordina",
       "",
       "Hola 👋 quiero hacer este pedido."
     ].join("\n");
@@ -1745,6 +1764,7 @@ updateZelleTotals();
     });
   };
 </script>
+
 
 <script>
   // ====== BLOQUEO + DESBLOQUEO DE PAGO (ÚNICO Y LIMPIO) ======
