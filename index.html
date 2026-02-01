@@ -1657,6 +1657,46 @@
 </script>
 <script>
   // ====== CONTADOR + BLOQUEO DE PAGO (CORREGIDO) ======
+  <script>
+    // ====== DESBLOQUEO POR CÓDIGO ======
+
+    function unlockWithCode(){
+    const input = document.getElementById("earlyAccessInput");
+    const msg   = document.getElementById("earlyAccessMsg");
+    const paySection = document.getElementById("pago");
+
+    if (!input || !paySection) return;
+
+    const code = input.value.trim().toUpperCase();
+
+    // 🔑 CÓDIGO CORRECTO
+    if (code === "THANKYOUFORTHESUPPORT") {
+
+    // Marcar como desbloqueado
+    earlyAccessUnlocked = true;
+
+    // Desbloquear sección
+    paySection.classList.remove("pay-locked");
+    paySection.style.opacity = "1";
+    paySection.style.pointerEvents = "auto";
+
+    // Mensaje visual
+    msg.textContent = "✅ Acceso anticipado activado";
+    msg.style.color = "#8b5cf6";
+
+    // Opcional: ocultar el countdown
+    const cd = document.getElementById("payCountdown");
+    if (cd) cd.remove();
+
+    const lockMsg = document.getElementById("payLockedMsg");
+    if (lockMsg) lockMsg.remove();
+
+  } else {
+    msg.textContent = "❌ Código incorrecto";
+    msg.style.color = "#ff6b6b";
+  }
+  }
+</script>
 
   let earlyAccessUnlocked = false;
 
