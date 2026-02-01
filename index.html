@@ -1682,7 +1682,7 @@ updateZelleTotals();
     window.open(`https://wa.me/15076214496?text=${encodeURIComponent(msg)}`);
   };
 </script>
-<script>
+<<script>
   window.sendZelleInstagram = function(){
     const mid   = document.getElementById("zlMid")?.checked;
     const cal   = document.getElementById("zlCal")?.checked;
@@ -1694,11 +1694,10 @@ updateZelleTotals();
       return;
     }
 
-    // precios
+    // Precios (los mismos que usas en tu cálculo)
     const SHIRT_PRICE_ZELLE  = 35.99;
     const HOODIE_PRICE_ZELLE = 50.00;
 
-    // construye item + base
     let base = 0;
     const items = [];
 
@@ -1719,16 +1718,18 @@ updateZelleTotals();
       items.push("• Hoodie CALMA MODE — $50.00");
     }
 
-    // cupón (usa tu variable global couponAppliedZelle)
+    // ✅ LEE AUTOMÁTICAMENTE si el cupón fue aplicado en la página
+    // (tu botón "Aplicar" ya cambia couponAppliedZelle)
+    const hasCoupon = (typeof couponAppliedZelle !== "undefined") ? couponAppliedZelle : false;
     const couponCode = "FIRSTDROP10";
-    const hasCoupon = !!window.couponAppliedZelle; // o couponAppliedZelle si está en el mismo scope
 
     const disc = hasCoupon ? base * 0.10 : 0;
     const total = base - disc;
 
+    // ✅ Texto dinámico para el mensaje
     const couponLine = hasCoupon
             ? `Cupón aplicado: ${couponCode} ✅ (-$${disc.toFixed(2)})`
-            : `Cupón aplicado: NO`;
+            : "Cupón aplicado: NO";
 
     const totalLine = hasCoupon
             ? `Total a pagar (con cupón): $${total.toFixed(2)}`
@@ -1764,8 +1765,6 @@ updateZelleTotals();
     });
   };
 </script>
-
-
 <script>
   // ====== BLOQUEO + DESBLOQUEO DE PAGO (ÚNICO Y LIMPIO) ======
 
