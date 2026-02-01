@@ -1682,8 +1682,8 @@ updateZelleTotals();
     window.open(`https://wa.me/15076214496?text=${encodeURIComponent(msg)}`);
   };
 </script>
-<<script>
-  window.sendZelleInstagram = function(){
+<script>
+  window.sendZelleWhatsApp = function(){
     const mid   = document.getElementById("zlMid")?.checked;
     const cal   = document.getElementById("zlCal")?.checked;
     const hood1 = document.getElementById("zlHoodie1")?.checked;
@@ -1694,7 +1694,7 @@ updateZelleTotals();
       return;
     }
 
-    // Precios (los mismos que usas en tu cálculo)
+    // Precios (igual que en tu página)
     const SHIRT_PRICE_ZELLE  = 35.99;
     const HOODIE_PRICE_ZELLE = 50.00;
 
@@ -1718,15 +1718,13 @@ updateZelleTotals();
       items.push("• Hoodie CALMA MODE — $50.00");
     }
 
-    // ✅ LEE AUTOMÁTICAMENTE si el cupón fue aplicado en la página
-    // (tu botón "Aplicar" ya cambia couponAppliedZelle)
+    // ✅ Lee automáticamente si el cupón fue aplicado en la página
     const hasCoupon = (typeof couponAppliedZelle !== "undefined") ? couponAppliedZelle : false;
     const couponCode = "FIRSTDROP10";
 
     const disc = hasCoupon ? base * 0.10 : 0;
     const total = base - disc;
 
-    // ✅ Texto dinámico para el mensaje
     const couponLine = hasCoupon
             ? `Cupón aplicado: ${couponCode} ✅ (-$${disc.toFixed(2)})`
             : "Cupón aplicado: NO";
@@ -1736,7 +1734,7 @@ updateZelleTotals();
             : `Total a pagar: $${total.toFixed(2)}`;
 
     const msg = [
-      "📸 PEDIDO POR INSTAGRAM — Cash y Calma",
+      "🏦 PEDIDO (ZELLE/Crypto/Cashapp/Paypal) — Cash y Calma",
       "",
       "Producto:",
       ...items,
@@ -1747,24 +1745,16 @@ updateZelleTotals();
       "📦 Entrega estimada: 7–14 días hábiles",
       "Envío: se coordina",
       "",
-      "Hola 👋 quiero hacer este pedido."
+      "✅ Método: Zelle/Crypto/Cashapp/Paypal"
     ].join("\n");
 
-    const IG_USER = "cashycalma_";
-    const IG_URL  = `https://www.instagram.com/${IG_USER}/`;
+    // ✅ Usa tu número ya puesto en el sitio (cámbialo aquí si quieres)
+    const OWNER_WA = "15076214496";
 
-    navigator.clipboard.writeText(msg).then(() => {
-      alert(
-              "Mensaje copiado ✅\n\n" +
-              "Se abrirá Instagram.\n" +
-              "Pega el mensaje en el DM y envíalo 📩"
-      );
-      window.open(IG_URL, "_blank", "noopener");
-    }).catch(() => {
-      window.open(IG_URL, "_blank", "noopener");
-    });
+    window.open(`https://wa.me/${OWNER_WA}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
   };
 </script>
+
 <script>
   // ====== BLOQUEO + DESBLOQUEO DE PAGO (ÚNICO Y LIMPIO) ======
 
