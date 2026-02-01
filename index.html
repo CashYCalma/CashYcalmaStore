@@ -619,6 +619,7 @@
         <h3 style="margin:0 0 8px">DROPS: “MIDNIGHT PURPLE Y CALMA MODE”</h3>
         <p class="muted" style="margin:0 0 14px">
           Camisetas negras con detalles morados / blancas con detalles negro. Stock limitado.
+          Da clic en el icono de Instagram para que te dirija a la cuenta para hacer tu pedido.
           Pago en línea se habilitará muy pronto.
         </p>
         <div style="display:flex; gap:10px; flex-wrap:wrap">
@@ -1308,6 +1309,34 @@
   };
 
   let couponAppliedPay = false;
+  // ====== BLOQUEO CUPÓN SQUARE: 1 vez por prenda (por navegador) ======
+  const SQ_COUPON_USED_KEY = "cyc_sq_coupon_used_v1"; // guarda {midnight:true, calma:true}
+
+  function loadSqCouponUsed(){
+    try{ return JSON.parse(localStorage.getItem(SQ_COUPON_USED_KEY) || "{}"); }
+    catch(e){ return {}; }
+  }
+  function saveSqCouponUsed(map){
+    localStorage.setItem(SQ_COUPON_USED_KEY, JSON.stringify(map));
+  }
+
+  function getSelectedSquareKey(){
+    const mid = document.getElementById("sqMid")?.checked;
+    const cal = document.getElementById("sqCal")?.checked;
+    if(mid) return "midnight";
+    if(cal) return "calma";
+    return null;
+  }
+
+  function resetSquareCouponUI(){
+    couponAppliedPay = false;
+    const msg = document.getElementById("payCouponMsg");
+    const input = document.getElementById("payCoupon");
+    if(input) input.value = "";
+    if(msg) msg.textContent = "";
+    updateSquareTotals();
+  }
+
   let couponAppliedZelle = false;
 
   function normalizeCode(s){ return (s || "").trim().toUpperCase(); }
@@ -1384,10 +1413,37 @@
   });
 
   document.getElementById("btnApplyPayCoupon").onclick = () => {
-    couponAppliedPay = normalizeCode(payCoupon.value) === "FIRSTDROP10";
-    payCouponMsg.textContent = couponAppliedPay ? "Cupón aplicado ✅" : "Cupón inválido ❌";
+    const code = normalizeCode(document.getElementById("payCoupon")?.value);
+    const msg  = document.getElementById("payCouponMsg");
+
+    const key = getSelectedSquareKey();
+    if(!key){
+      couponAppliedPay = false;
+      if(msg) msg.textContent = "Selecciona primero Midnight o Calma para aplicar el cupón.";
+      updateSquareTotals();
+      return;
+    }
+
+    if(code !== "FIRSTDROP10"){
+      couponAppliedPay = false;
+      if(msg) msg.textContent = code ? "Cupón inválido ❌" : "";
+      updateSquareTotals();
+      return;
+    }
+
+    const used = loadSqCouponUsed();
+    if(used[key]){
+      couponAppliedPay = false;
+      if(msg) msg.textContent = "Este cupón ya fue usado para esta prenda en este dispositivo ✅";
+      updateSquareTotals();
+      return;
+    }
+
+    couponAppliedPay = true;
+    if(msg) msg.textContent = "Cupón aplicado ✅ (1 uso por prenda)";
     updateSquareTotals();
   };
+
 
   document.getElementById("btnApplyZlCoupon").onclick = () => {
     couponAppliedZelle = normalizeCode(zlCoupon.value) === "FIRSTDROP10";
@@ -1409,6 +1465,13 @@
     const link = mid
             ? (couponAppliedPay ? SQUARE_LINKS.midnight.coupon : SQUARE_LINKS.midnight.normal)
             : (couponAppliedPay ? SQUARE_LINKS.calma.coupon : SQUARE_LINKS.calma.normal);
+    // ✅ si va con cupón, marcar como usado 1 vez por prenda
+    if(couponAppliedPay){
+      const key = mid ? "midnight" : "calma";
+      const used = loadSqCouponUsed();
+      used[key] = true;
+      saveSqCouponUsed(used);
+    }
     window.open(link, "_blank");
   };
 </script>
