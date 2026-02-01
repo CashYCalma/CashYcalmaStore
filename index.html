@@ -1656,77 +1656,6 @@
   };
 </script>
 <script>
-  // ====== CONTADOR + BLOQUEO DE PAGO (FINAL) ======
-  let earlyAccessUnlocked = false;
-  // 1 de febrero a las 12:00 PM (hora local del usuario)
-  const PAY_UNLOCK_DATE = new Date(2026, 1, 1, 12, 0, 0);
-
-  const paySection = document.getElementById("pago");
-  const lockMsg = document.getElementById("payLockedMsg");
-  const cdWrap = document.getElementById("payCountdown");
-
-  const dEl = document.getElementById("payDays");
-  const hEl = document.getElementById("payHours");
-  const mEl = document.getElementById("payMins");
-  const sEl = document.getElementById("paySecs");
-
-  function pad(n){ return String(n).padStart(2,"0"); }
-
-  function updatePayCountdown(){
-
-    if (earlyAccessUnlocked) {
-      return; // ⛔ NO volver a bloquear si ya se desbloqueó por código
-    }
-
-    const now = new Date();
-    let diff = PAY_UNLOCK_DATE - now;
-
-    if(diff <= 0){
-      paySection.style.opacity = "1";
-      paySection.style.pointerEvents = "auto";
-      paySection.removeAttribute("data-locked");
-      paySection.classList.remove("pay-locked");
-
-      if(lockMsg) lockMsg.remove();
-      if(cdWrap) cdWrap.remove();
-      return;
-    }
-
-    paySection.style.opacity = ".5";
-    paySection.style.pointerEvents = "none";
-
-    const sec = Math.floor(diff / 1000);
-    const days = Math.floor(sec / 86400);
-    const hours = Math.floor((sec % 86400) / 3600);
-    const mins = Math.floor((sec % 3600) / 60);
-    const secs = sec % 60;
-
-    if(dEl) dEl.textContent = pad(days);
-    if(hEl) hEl.textContent = pad(hours);
-    if(mEl) mEl.textContent = pad(mins);
-    if(sEl) sEl.textContent = pad(secs);
-  }
-
-  // 🔒 BLOQUEADO
-    paySection.style.opacity = ".5";
-    paySection.style.pointerEvents = "none";
-
-    const sec = Math.floor(diff / 1000);
-    const days = Math.floor(sec / 86400);
-    const hours = Math.floor((sec % 86400) / 3600);
-    const mins = Math.floor((sec % 3600) / 60);
-    const secs = sec % 60;
-
-    if(dEl) dEl.textContent = pad(days);
-    if(hEl) hEl.textContent = pad(hours);
-    if(mEl) mEl.textContent = pad(mins);
-    if(sEl) sEl.textContent = pad(secs);
-  }
-
-  updatePayCountdown();
-  setInterval(updatePayCountdown, 1000);
-</script>
-<script>
   // ====== CONTADOR + BLOQUEO DE PAGO (CORREGIDO) ======
 
   let earlyAccessUnlocked = false;
@@ -1784,17 +1713,6 @@
 
   updatePayCountdown();
   setInterval(updatePayCountdown, 1000);
-</script>
-<script>
-// 🔒 Siempre iniciar bloqueado al cargar la página
-window.addEventListener("load", () => {
-const paySection = document.getElementById("pago");
-if (!paySection) return;
-
-paySection.classList.add("pay-locked");
-paySection.style.opacity = ".5";
-paySection.style.pointerEvents = "none";
-});
 </script>
 </body>
 </html>
